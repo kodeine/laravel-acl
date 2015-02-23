@@ -1,4 +1,4 @@
-<?php namespace App\Http\Middleware;
+<?php namespace Kodeine\Acl\Middleware;
 
 use Closure;
 
