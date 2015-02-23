@@ -1,0 +1,183 @@
+<?php namespace Kodeine\Acl\Traits;
+
+use Kodeine\Acl\Helper;
+
+trait HasPermission
+{
+    use HasUserPermission, Helper;
+
+    /*
+    |----------------------------------------------------------------------
+    | Permission Trait Methods
+    |----------------------------------------------------------------------
+    |
+    */
+
+    /**
+     * Users can have many permissions overridden from permissions.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany('Kodeine\Acl\Permission')->withTimestamps();
+    }
+
+    /**
+     * Get all user permissions including
+     * user all role permissions.
+     *
+     * @return array|null
+     */
+    public function getPermissions()
+    {
+        // user permissions overridden from role.
+        $permissions = $this->toDotPermissions();
+
+        // permissions based on role.
+        foreach ($this->roles as $role) {
+            $permissions = $permissions + $role->getPermissions();
+        }
+
+        return $permissions;
+    }
+
+    /**
+     * Check if user has the given permission.
+     *
+     * @param  string $permission
+     * @return bool
+     */
+    public function can($permission)
+    {
+        //$permission = $this->hasDelimiterToArray($permission);
+
+        // user has its own permissions
+        // without any role?
+        $merge = $this->toDotPermissions();
+
+        // permissions based on role
+        foreach ($this->roles as $role) {
+            if ( $role->can($permission, $merge) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Assigns the given permission to the user.
+     *
+     * @param  object|array|string|int $permission
+     * @return bool
+     */
+    public function assignPermission($permission)
+    {
+        return $this->mapArray($permission, function ($permission) {
+
+            $permissionId = $this->parsePermissionId($permission);
+
+            if ( ! $this->permissions->contains($permissionId) ) {
+                $this->permissions()->attach($permissionId);
+
+                return $permission;
+            }
+
+            return false;
+        });
+    }
+
+    /**
+     * Revokes the given permission from the user.
+     *
+     * @param  object|array|string|int $permission
+     * @return bool
+     */
+    public function revokePermission($permission)
+    {
+        return $this->mapArray($permission, function ($permission) {
+
+            $permissionId = $this->parsePermissionId($permission);
+
+            return $this->permissions()->detach($permissionId);
+        });
+    }
+
+    /**
+     * Syncs the given permission(s) with the user.
+     *
+     * @param  object|array|string|int $permissions
+     * @return bool
+     */
+    public function syncPermissions($permissions)
+    {
+        $sync = [];
+        $this->mapArray($permissions, function ($permission) use (&$sync) {
+
+            $sync[] = $this->parsePermissionId($permission);
+
+            return $sync;
+        });
+
+        return $this->permissions()->sync($sync);
+    }
+
+    /**
+     * Revokes all permissions from the user.
+     *
+     * @return bool
+     */
+    public function revokeAllPermissions()
+    {
+        return $this->permissions()->detach();
+    }
+
+    /*
+    |----------------------------------------------------------------------
+    | Protected Methods
+    |----------------------------------------------------------------------
+    |
+    */
+
+
+    /**
+     * Parses permission id from object or array.
+     *
+     * @param object|array|int $permission
+     * @return mixed
+     */
+    protected function parsePermissionId($permission)
+    {
+        if ( is_string($permission) ) {
+            $model = new \Kodeine\Acl\Permission;
+            $find = $model->whereSlug($permission)->first();
+
+            if ( ! is_object($find) ) {
+                throw new \InvalidArgumentException('Specified permission slug does not exists.');
+            }
+
+            $permission = $find->getKey();
+        }
+
+        //$model = '\Illuminate\Database\Eloquent\Model';
+        if ( is_object($permission) && $permission instanceof Model ) {
+            $permission = $permission->getKey();
+        }
+
+        if ( is_array($permission) ) {
+            $permission = $permission['id'];
+        }
+
+        // if its object or slug, we already take it out from db
+        // ignore those for verifying id.
+        if ( ! is_string($permission)
+            && ! is_object($permission)
+            && is_null($this->permissions()->find($permission))
+        ) {
+            throw new \InvalidArgumentException('Specified permission id does not exists.');
+        }
+
+        return (int) $permission;
+    }
+}
