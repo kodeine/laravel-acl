@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php namespace Kodeine\Acl\Helper;
 
 
 trait Helper

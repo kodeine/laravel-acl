@@ -1,6 +1,6 @@
 <?php namespace Kodeine\Acl\Traits;
 
-use Kodeine\Acl\Helper;
+use Kodeine\Acl\Helper\Helper;
 
 trait HasPermission
 {
