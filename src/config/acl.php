@@ -1,6 +1,6 @@
 <?php
-return [
 
-	'role' => '1',
-	'permission' => '1',
+return [
+    'role'       => 'Kodeine\Acl\Role',
+    'permission' => 'Kodeine\Acl\Permission',
 ];

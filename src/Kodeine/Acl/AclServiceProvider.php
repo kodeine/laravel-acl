@@ -13,12 +13,9 @@ class AclServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('/database/migrations')
+            __DIR__ . '/../../config/acl.php' => config_path('acl.php'),
+            __DIR__ . '/../../migrations/'    => base_path('/database/migrations'),
         ], 'migrations');
-
-        $this->publishes([
-            __DIR__.'/../config/api.php' => config_path('api.php'),
-        ]);
     }
 
     /**
