@@ -6,7 +6,7 @@
 [![Build Status](http://img.shields.io/travis/kodeine/laravel--acl/master.svg?style=flat-square)](https://travis-ci.org/kodeine/laravel-acl)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
-Laravel ACL adds role based permissions to your Laravel 5 applications.
+Laravel ACL adds role based permissions to `Laravel 5 built in Auth` system.
 Middleware helps protect routes based on roles and even protects crud methods.
 Follow along the documentation to find out more.
 
