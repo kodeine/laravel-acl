@@ -11,14 +11,14 @@ trait Helper
     |
     */
 
-    protected function toDotPermissions()
+    protected function toDotPermissions(array $permissions)
     {
         $data = [];
-        $list = $this->permissions->lists('slug', 'name');
-        foreach ($list as $alias => $perm) {
+        //$permissions = $this->permissions->lists('slug', 'name');
+        foreach ($permissions as $alias => $perm) {
             if ( ! is_array($perm) ) continue;
             foreach ($perm as $key => $value) {
-                if ( (bool) $value == false ) continue;
+                //if ( (bool) $value == false ) continue;
                 $slug = $key . '.' . $alias;
                 $data[$slug] = $value;
                 //$data[] = $slug;

@@ -1,5 +1,6 @@
 <?php namespace Kodeine\Acl;
 
+use Config;
 use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
@@ -25,7 +26,8 @@ class Permission extends Model
      */
     public function roles()
     {
-        return $this->belongsToMany('Kodeine\Acl\Role')->withTimestamps();
+        $model = Config::get('acl.role', 'Kodeine\Acl\Role');
+        return $this->belongsToMany($model)->withTimestamps();
     }
 
     /**
@@ -35,7 +37,7 @@ class Permission extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(\Config::get('auth.model'))->withTimestamps();
+        return $this->belongsToMany(Config::get('auth.model'))->withTimestamps();
     }
 
     /**
@@ -54,10 +56,15 @@ class Permission extends Model
     {
         $value = is_array($value) ? $value : [$value => true];
 
+        // if attribute is being updated.
         if ( isset($this->original['slug']) ) {
             $value = $value + json_decode($this->original['slug'], true);
         }
 
+        // remove null values.
+        $value = array_filter($value, 'is_bool');
+
+        // store as json.
         $this->attributes['slug'] = json_encode($value);
     }
 

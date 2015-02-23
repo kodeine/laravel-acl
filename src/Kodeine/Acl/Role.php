@@ -39,7 +39,7 @@ class Role extends Model
      */
     public function getPermissions()
     {
-        return $this->toDotPermissions();
+        return $this->permissions->lists('slug', 'name');
     }
 
     /**
@@ -49,28 +49,19 @@ class Role extends Model
      * @param array  $mergePermissions
      * @return bool
      */
-    /*public function can($permission, $mergePermissions = [])
-    {
-        $permissions = $this->getPermissions() + $mergePermissions;
-
-        if ( is_array($permission) ) {
-            $intersect = array_intersect($permissions, $permission);
-
-            return count($permission) == count($intersect);
-        }
-
-        return in_array($permission, $permissions);
-    }*/
-
     public function can($permission, $mergePermissions = [])
     {
         $permission = $this->hasDelimiterToArray($permission);
         $permissions = $this->getPermissions() + $mergePermissions;
 
-        if ( is_array($permission) ) {
-            $diff = array_intersect_key($permissions, array_flip($permission));
+        // make permissions to dot notation.
+        // create.user, delete.admin etc.
+        $permissions = $this->toDotPermissions($permissions);
 
-            return count($permission) == count($diff);
+        if ( is_array($permission) ) {
+            $intersect = array_intersect_key($permissions, array_flip($permission));
+
+            return count($permission) == count($intersect);
         }
 
         return isset($permissions[$permission]) && $permissions[$permission] == true;

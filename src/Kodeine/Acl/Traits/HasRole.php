@@ -19,7 +19,8 @@ trait HasRole
      */
     public function roles()
     {
-        return $this->belongsToMany('Kodeine\Acl\Role')->withTimestamps();
+        $model = \Config::get('acl.role', 'Kodeine\Acl\Role');
+        return $this->belongsToMany($model)->withTimestamps();
     }
 
     /**

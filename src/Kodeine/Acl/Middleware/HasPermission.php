@@ -95,8 +95,7 @@ class HasPermission
         $methods = $this->getAction('protect_methods');
 
         $called = is_array($methods) ? $this->parseMethod() : $request->method();
-        $methods = is_array($methods) ? $methods : $this->crud['restful'] /*$this->crud['resource'] */
-        ;
+        $methods = is_array($methods) ? $methods : $this->crud['restful'] /*$this->crud['resource'] */;
 
         // if controller is not like UserController@index
         // and is UserController we use restful crud

@@ -20,7 +20,8 @@ trait HasPermission
      */
     public function permissions()
     {
-        return $this->belongsToMany('Kodeine\Acl\Permission')->withTimestamps();
+        $model = \Config::get('acl.permission', 'Kodeine\Acl\Permission');
+        return $this->belongsToMany($model)->withTimestamps();
     }
 
     /**
@@ -32,7 +33,7 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = $this->toDotPermissions();
+        $permissions = $this->permissions->lists('slug', 'name');
 
         // permissions based on role.
         foreach ($this->roles as $role) {
@@ -50,11 +51,9 @@ trait HasPermission
      */
     public function can($permission)
     {
-        //$permission = $this->hasDelimiterToArray($permission);
-
         // user has its own permissions
         // without any role?
-        $merge = $this->toDotPermissions();
+        $merge = $this->getPermissions();
 
         // permissions based on role
         foreach ($this->roles as $role) {
