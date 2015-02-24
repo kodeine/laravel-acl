@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl;
+<?php namespace Kodeine\Acl\Models\Eloquent;
 
 use Config;
 use Illuminate\Database\Eloquent\Model;
