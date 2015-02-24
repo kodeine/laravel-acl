@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'role'       => 'Kodeine\Acl\Role',
-    'permission' => 'Kodeine\Acl\Permission',
+    'role'       => 'Kodeine\Acl\Models\Eloquent\Role',
+    'permission' => 'Kodeine\Acl\Models\Eloquent\Permission',
 ];

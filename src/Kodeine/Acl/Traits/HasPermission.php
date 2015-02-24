@@ -20,7 +20,7 @@ trait HasPermission
      */
     public function permissions()
     {
-        $model = \Config::get('acl.permission', 'Kodeine\Acl\Permission');
+        $model = \Config::get('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
         return $this->belongsToMany($model)->withTimestamps();
     }
 
@@ -149,7 +149,7 @@ trait HasPermission
     protected function parsePermissionId($permission)
     {
         if ( is_string($permission) ) {
-            $model = new \Kodeine\Acl\Permission;
+            $model = new \Kodeine\Acl\Models\Eloquent\Permission;
             $find = $model->whereSlug($permission)->first();
 
             if ( ! is_object($find) ) {

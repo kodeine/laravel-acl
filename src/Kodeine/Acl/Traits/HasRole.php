@@ -19,7 +19,7 @@ trait HasRole
      */
     public function roles()
     {
-        $model = \Config::get('acl.role', 'Kodeine\Acl\Role');
+        $model = \Config::get('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
         return $this->belongsToMany($model)->withTimestamps();
     }
 
@@ -130,7 +130,7 @@ trait HasRole
     protected function parseRoleId($role)
     {
         if ( is_string($role) ) {
-            $model = new \Kodeine\Acl\Role;
+            $model = new \Kodeine\Acl\Models\Eloquent\Role;
             $find = $model->whereSlug($role)->first();
 
             if ( ! is_object($find) ) {
