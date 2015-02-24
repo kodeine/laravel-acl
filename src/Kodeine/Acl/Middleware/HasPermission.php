@@ -5,20 +5,24 @@ use Closure;
 class HasPermission
 {
     protected $crud = [
-        'restful' => [
+        'restful'   => [
             'create' => ['POST'],
             'read'   => ['GET', 'HEAD', 'OPTIONS'],
             'view'   => ['GET', 'HEAD', 'OPTIONS'],
             'update' => ['PUT', 'PATCH'],
             'delete' => ['DELETE']
         ],
-        /*'resource' => [
-            'create' => ['create', 'store'],
-            'read'   => ['index', 'show'],
-            'view'   => ['index', 'show'],
-            'update' => ['edit', 'update'],
+        'resource'  => [
+            'create' => ['store'],
+            'read'   => ['index', 'create', 'show', 'edit'],
+            'view'   => ['index', 'create', 'show', 'edit'],
+            'update' => ['update'],
             'delete' => ['destroy']
-        ]*/
+        ],
+        'resources' => [
+            'index', 'create', 'store',
+            'show', 'edit', 'update', 'destroy'
+        ],
     ];
 
     /**
@@ -92,16 +96,25 @@ class HasPermission
     {
         $request = $this->request;
 
+        // available methods for resources.
+        $resources = $this->crud['resources'];
+
+        // protection methods being passed in a route.
         $methods = $this->getAction('protect_methods');
 
-        $called = is_array($methods) ? $this->parseMethod() : $request->method();
-        $methods = is_array($methods) ? $methods : $this->crud['restful'] /*$this->crud['resource'] */;
+        // get method being called on controller.
+        $caller = $this->parseMethod();
 
-        // if controller is not like UserController@index
-        // and is UserController we use restful crud
-        if ( ! $this->parseMethod() ) {
-            $methods = $this->crud['restful'];
-        }
+        // determine if we use resource or restful http method to protect crud.
+        $called = in_array($caller, $resources) ? $caller : $request->method();
+
+        // if controller is a resource or closure
+        // and does not have methods like
+        // UserController@index but only
+        // UserController we use crud restful.
+        $methods = is_array($methods) ? $methods :
+            in_array($caller, $resources) ?
+                $this->crud['resource'] : $this->crud['restful'];
 
         // determine crud method we're trying to protect
         $crud = array_where($methods, function ($k, $v) use ($called) {
