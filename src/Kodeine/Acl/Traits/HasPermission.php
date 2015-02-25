@@ -148,33 +148,22 @@ trait HasPermission
      */
     protected function parsePermissionId($permission)
     {
-        if ( is_string($permission) ) {
+        if ( is_string($permission) || is_numeric($permission) ) {
+
             $model = new \Kodeine\Acl\Models\Eloquent\Permission;
-            $find = $model->whereSlug($permission)->first();
+            $key = ctype_alpha($permission) ? 'name' : 'id';
+            $find = $model->where($key, $permission)->first();
 
             if ( ! is_object($find) ) {
-                throw new \InvalidArgumentException('Specified permission slug does not exists.');
+                throw new \InvalidArgumentException('Specified permission ' . $key . ' does not exists.');
             }
 
             $permission = $find->getKey();
         }
 
-        //$model = '\Illuminate\Database\Eloquent\Model';
-        if ( is_object($permission) && $permission instanceof Model ) {
+        $model = '\Illuminate\Database\Eloquent\Model';
+        if ( is_object($permission) && $permission instanceof $model ) {
             $permission = $permission->getKey();
-        }
-
-        if ( is_array($permission) ) {
-            $permission = $permission['id'];
-        }
-
-        // if its object or slug, we already take it out from db
-        // ignore those for verifying id.
-        if ( ! is_string($permission)
-            && ! is_object($permission)
-            && is_null($this->permissions()->find($permission))
-        ) {
-            throw new \InvalidArgumentException('Specified permission id does not exists.');
         }
 
         return (int) $permission;

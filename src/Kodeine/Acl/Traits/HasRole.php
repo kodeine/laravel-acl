@@ -129,33 +129,22 @@ trait HasRole
      */
     protected function parseRoleId($role)
     {
-        if ( is_string($role) ) {
+        if ( is_string($role) || is_numeric($role) ) {
+
             $model = new \Kodeine\Acl\Models\Eloquent\Role;
-            $find = $model->whereSlug($role)->first();
+            $key = ctype_alpha($role) ? 'slug' : 'id';
+            $find = $model->where($key, $role)->first();
 
             if ( ! is_object($find) ) {
-                throw new \InvalidArgumentException('Specified role slug does not exists.');
+                throw new \InvalidArgumentException('Specified role ' . $key . ' does not exists.');
             }
 
             $role = $find->getKey();
         }
 
-        //$model = '\Illuminate\Database\Eloquent\Model';
-        if ( is_object($role) && $role instanceof Model ) {
+        $model = '\Illuminate\Database\Eloquent\Model';
+        if ( is_object($role) && $role instanceof $model ) {
             $role = $role->getKey();
-        }
-
-        if ( is_array($role) ) {
-            $role = $role['id'];
-        }
-
-        // if its object or slug, we already take it out from db
-        // ignore those for verifying id.
-        if ( ! is_string($role)
-            && ! is_object($role)
-            && is_null($this->roles()->find($role))
-        ) {
-            throw new \InvalidArgumentException('Specified role id does not exists.');
         }
 
         return (int) $role;

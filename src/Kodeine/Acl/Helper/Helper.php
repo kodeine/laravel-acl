@@ -62,6 +62,13 @@ trait Helper
 
         // multiple items
         if ( is_array($item) ) {
+            // is an array of One Role
+            // its an array containing id
+            // we dont have to loop through
+            if ( isset($item['id']) )
+                return $closure((int) $item['id']);
+
+            // is an array of slugs
             return array_map($closure, $item);
         }
 
