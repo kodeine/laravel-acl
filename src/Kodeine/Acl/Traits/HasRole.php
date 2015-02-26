@@ -132,7 +132,7 @@ trait HasRole
         if ( is_string($role) || is_numeric($role) ) {
 
             $model = new \Kodeine\Acl\Models\Eloquent\Role;
-            $key = ctype_alpha($role) ? 'slug' : 'id';
+            $key = is_numeric($role) ? 'id' : 'slug';
             $find = $model->where($key, $role)->first();
 
             if ( ! is_object($find) ) {

@@ -151,7 +151,7 @@ trait HasPermission
         if ( is_string($permission) || is_numeric($permission) ) {
 
             $model = new \Kodeine\Acl\Models\Eloquent\Permission;
-            $key = ctype_alpha($permission) ? 'name' : 'id';
+            $key = is_numeric($permission) ? 'id' : 'name';
             $find = $model->where($key, $permission)->first();
 
             if ( ! is_object($find) ) {
