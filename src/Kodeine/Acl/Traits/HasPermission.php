@@ -77,7 +77,7 @@ trait HasPermission
 
             $permissionId = $this->parsePermissionId($permission);
 
-            if ( ! $this->permissions->contains($permissionId) ) {
+            if ( ! $this->permissions->keyBy('id')->has($permissionId) ) {
                 $this->permissions()->attach($permissionId);
 
                 return $permission;

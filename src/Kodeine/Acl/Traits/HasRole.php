@@ -58,7 +58,7 @@ trait HasRole
 
             $roleId = $this->parseRoleId($role);
 
-            if ( ! $this->roles->contains($roleId) ) {
+            if ( ! $this->roles->keyBy('id')->has($roleId) ) {
                 $this->roles()->attach($roleId);
 
                 return $role;
