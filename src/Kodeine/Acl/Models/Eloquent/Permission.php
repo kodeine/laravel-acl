@@ -1,6 +1,5 @@
 <?php namespace Kodeine\Acl\Models\Eloquent;
 
-use Config;
 use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
@@ -10,7 +9,7 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug', 'description'];
+    protected $fillable = ['name', 'slug', 'description', 'inherit_id'];
 
     /**
      * The database table used by the model.
@@ -26,7 +25,8 @@ class Permission extends Model
      */
     public function roles()
     {
-        $model = Config::get('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+
         return $this->belongsToMany($model)->withTimestamps();
     }
 
@@ -37,7 +37,7 @@ class Permission extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(Config::get('auth.model'))->withTimestamps();
+        return $this->belongsToMany(config('auth.model'))->withTimestamps();
     }
 
     /**

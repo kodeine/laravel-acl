@@ -35,6 +35,15 @@ trait Helper
     |
     */
 
+    protected function parseOperator($str)
+    {
+        if (preg_match('/([,|])(?:\s+)?/', $str, $m)) {
+            return $m[1] == '|' ? 'or' : 'and';
+        }
+
+        return false;
+    }
+
     /**
      * Converts strings having comma
      * or pipe to an array
