@@ -52,7 +52,8 @@ trait Helper
 
     /**
      * Converts strings having comma
-     * or pipe to an array
+     * or pipe to an array in
+     * lowercase
      *
      * @param $str
      * @return array
@@ -61,9 +62,10 @@ trait Helper
     {
         if ( is_string($str) && preg_match('/[,|]/is', $str) ) {
             $str = preg_split('/ ?[,|] ?/', $str);
+            $str = array_filter($str, 'strtolower');
         }
 
-        return $str;
+        return strtolower($str);
     }
 
     /**

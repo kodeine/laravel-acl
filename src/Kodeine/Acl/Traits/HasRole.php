@@ -40,11 +40,28 @@ trait HasRole
      * @param  string $slug
      * @return bool
      */
-    public function is($slug)
+    public function is($slug, $operator = null)
     {
-        $slug = strtolower($slug);
+        $operator = is_null(null) ? $this->parseOperator($slug) : $operator;
 
-        return in_array($slug, $this->getRoles());
+        $roles = $this->getRoles();
+        $slug = $this->hasDelimiterToArray($slug);
+
+        // array of slugs
+        if ( is_array($slug) ) {
+
+            if ( ! in_array($operator, ['and', 'or']) ) {
+                $e = 'Invalid operator, available operators are "and", "or".';
+                throw new \InvalidArgumentException($e);
+            }
+
+            $call = 'isWith' . ucwords($operator);
+
+            return $this->$call($slug, $roles);
+        }
+
+        // single slug
+        return in_array($slug, $roles);
     }
 
     /**
@@ -122,6 +139,38 @@ trait HasRole
     */
 
     /**
+     * @param $slug
+     * @param $roles
+     * @return bool
+     */
+    protected function isWithAnd($slug, $roles)
+    {
+        foreach ($slug as $check) {
+            if ( ! in_array($check, $roles) ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $slug
+     * @param $roles
+     * @return bool
+     */
+    protected function isWithOr($slug, $roles)
+    {
+        foreach ($slug as $check) {
+            if ( in_array($check, $roles) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Parses role id from object, array
      * or a string.
      *
@@ -168,15 +217,16 @@ trait HasRole
     public function __call($method, $arguments = [])
     {
         // Handle isRoleSlug() methods
-        if ( starts_with($method, 'is') and $method !== 'is' ) {
+        if ( starts_with($method, 'is') and $method !== 'is' and ! starts_with($method, 'isWith') ) {
             $role = substr($method, 2);
 
             return $this->is($role);
         }
 
         // Handle canDoSomething() methods
-        if ( starts_with($method, 'can') and $method !== 'can' ) {
+        if ( starts_with($method, 'can') and $method !== 'can' and ! starts_with($method, 'canWith') ) {
             $permission = substr($method, 3);
+            $permission = snake_case($permission, '.');
 
             return $this->can($permission);
         }
