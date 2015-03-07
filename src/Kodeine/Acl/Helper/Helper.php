@@ -61,11 +61,11 @@ trait Helper
     protected function hasDelimiterToArray($str)
     {
         if ( is_string($str) && preg_match('/[,|]/is', $str) ) {
-            $str = preg_split('/ ?[,|] ?/', $str);
-            $str = array_filter($str, 'strtolower');
+            return preg_split('/ ?[,|] ?/', strtolower($str));
         }
 
-        return strtolower($str);
+        return is_array($str) ?
+            array_filter($str, 'strtolower') : strtolower($str);
     }
 
     /**
