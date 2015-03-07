@@ -37,6 +37,12 @@ trait Helper
 
     protected function parseOperator($str)
     {
+        // if its an array lets use
+        // and operator by default
+        if (is_array($str)) {
+            $str = implode(',', $str);
+        }
+
         if (preg_match('/([,|])(?:\s+)?/', $str, $m)) {
             return $m[1] == '|' ? 'or' : 'and';
         }

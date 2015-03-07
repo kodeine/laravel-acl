@@ -84,7 +84,7 @@ class Role extends Model
     protected function canWithAnd($permission, $permissions)
     {
         foreach ($permission as $check) {
-            if ( ! in_array($check, $permissions) || $permissions[$check] != true ) {
+            if ( ! in_array($check, $permissions) || ! isset($permissions[$check]) || $permissions[$check] != true ) {
                 return false;
             }
         }
@@ -100,7 +100,7 @@ class Role extends Model
     protected function canWithOr($permission, $permissions)
     {
         foreach ($permission as $check) {
-            if ( in_array($check, $permissions) && $permissions[$check] == true ) {
+            if ( in_array($check, $permissions) && isset($permissions[$check]) && $permissions[$check] == true ) {
                 return true;
             }
         }
