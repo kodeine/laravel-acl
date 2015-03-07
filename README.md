@@ -14,6 +14,15 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. Ac
 
 Follow along the [Wiki](https://github.com/kodeine/laravel-acl/wiki) to find out more.
 
+#### Recent Changes
+
+> March 7, 2015.
+
+
+* `is()` and `can()` methods now support comma for `AND` and pipe as `OR` operator. Or pass an operator as a second param. [more here...](https://github.com/kodeine/laravel-acl/wiki/Validate-Permissions-and-Roles)
+* Permissions inheritance
+    * You can bind multiple permissions together so they inherit ones permission. [more here...](https://github.com/kodeine/laravel-acl/wiki/Permissions-Inheritance)
+
 #### Contribution guidelines
 
 Support follows PSR-1 and PSR-4 PHP coding standards, and semantic versioning.
