@@ -35,9 +35,25 @@ trait Helper
     |
     */
 
+    protected function parseOperator($str)
+    {
+        // if its an array lets use
+        // and operator by default
+        if (is_array($str)) {
+            $str = implode(',', $str);
+        }
+
+        if (preg_match('/([,|])(?:\s+)?/', $str, $m)) {
+            return $m[1] == '|' ? 'or' : 'and';
+        }
+
+        return false;
+    }
+
     /**
      * Converts strings having comma
-     * or pipe to an array
+     * or pipe to an array in
+     * lowercase
      *
      * @param $str
      * @return array
@@ -45,10 +61,11 @@ trait Helper
     protected function hasDelimiterToArray($str)
     {
         if ( is_string($str) && preg_match('/[,|]/is', $str) ) {
-            $str = preg_split('/ ?[,|] ?/', $str);
+            return preg_split('/ ?[,|] ?/', strtolower($str));
         }
 
-        return $str;
+        return is_array($str) ?
+            array_filter($str, 'strtolower') : strtolower($str);
     }
 
     /**

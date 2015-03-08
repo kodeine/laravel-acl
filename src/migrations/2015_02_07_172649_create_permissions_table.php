@@ -15,6 +15,7 @@ class CreatePermissionsTable extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('inherit_id')->index();
             $table->string('name')->index();
             $table->string('slug')->index();
             $table->text('description')->nullable();

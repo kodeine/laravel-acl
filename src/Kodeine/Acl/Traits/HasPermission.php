@@ -4,7 +4,7 @@ use Kodeine\Acl\Helper\Helper;
 
 trait HasPermission
 {
-    use HasUserPermission, Helper;
+    use HasUserPermission, HasPermissionInheritance, Helper;
 
     /*
     |----------------------------------------------------------------------
@@ -20,7 +20,8 @@ trait HasPermission
      */
     public function permissions()
     {
-        $model = \Config::get('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+        $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+
         return $this->belongsToMany($model)->withTimestamps();
     }
 
@@ -33,7 +34,7 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = $this->permissions->lists('slug', 'name');
+        $permissions = $this->getPermissionsInherited();
 
         // permissions based on role.
         foreach ($this->roles as $role) {
@@ -51,18 +52,16 @@ trait HasPermission
      */
     public function can($permission)
     {
-        // user has its own permissions
-        // without any role?
+        // user permissions including
+        // all of user role permissions
         $merge = $this->getPermissions();
 
-        // permissions based on role
-        foreach ($this->roles as $role) {
-            if ( $role->can($permission, $merge) ) {
-                return true;
-            }
-        }
+        // get first role and use can method
+        // $merge already has all user role
+        // permissions.
+        $role = $this->roles->first();
 
-        return false;
+        return ! is_null($role) && $role->can($permission, null, $merge);
     }
 
     /**
@@ -150,15 +149,15 @@ trait HasPermission
     {
         if ( is_string($permission) || is_numeric($permission) ) {
 
-            $model = new \Kodeine\Acl\Models\Eloquent\Permission;
+            $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
             $key = is_numeric($permission) ? 'id' : 'name';
-            $find = $model->where($key, $permission)->first();
+            $alias = (new $model)->where($key, $permission)->first();
 
-            if ( ! is_object($find) ) {
+            if ( ! is_object($alias) || ! $alias->exists ) {
                 throw new \InvalidArgumentException('Specified permission ' . $key . ' does not exists.');
             }
 
-            $permission = $find->getKey();
+            $permission = $alias->getKey();
         }
 
         $model = '\Illuminate\Database\Eloquent\Model';

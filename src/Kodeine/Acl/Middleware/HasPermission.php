@@ -36,9 +36,9 @@ class HasPermission
     {
         $this->request = $request;
 
-        if ( ( ! $this->getAction('is') or $this->hasRole())
-            and ( ! $this->getAction('can') and ! $this->getAction('protect_alias')
-                or $this->hasPermission())
+        if ( ( ! $this->getAction('is') or $this->hasRole() ) and
+             ( ! $this->getAction('can') or $this->hasPermission() ) and
+             ( ! $this->getAction('protect_alias') or $this->protectMethods() )
         ) {
             return $next($request);
         }
@@ -78,11 +78,6 @@ class HasPermission
     {
         $request = $this->request;
         $do = $this->getAction('can');
-
-        // if method protection is needed.
-        if ( ! $do && $this->getAction('protect_alias') ) {
-            return $this->protectMethods();
-        }
 
         return ! $this->forbiddenRoute() && $request->user()->can($do);
     }
