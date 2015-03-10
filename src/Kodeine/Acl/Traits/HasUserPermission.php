@@ -83,7 +83,7 @@ trait HasUserPermission
 
         $array = [
             'name' => $alias,
-            'slug' => $this->refreshSlug($alias, [
+            'slug' => $this->addSlug($alias, [
                 'create' => true, 'read' => true,
                 'view'   => true, 'update' => true,
                 'delete' => true
