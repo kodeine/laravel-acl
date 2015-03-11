@@ -1,11 +1,11 @@
 {
-    "name": "kodeine/laravel-acl",
+    "name": "nglelinh/laravel-acl",
     "description": "Light-weight role-based permissions for Laravel 5 built in Auth system.",
     "keywords": ["laravel", "permissions", "roles", "auth", "acl" , "security", "eloquent", "kodeine"],
     "authors": [
         {
             "name": "Ahsen M.",
-            "homepage": "https://github.com/kodeine",
+            "homepage": "https://github.com/nglelinh",
             "role": "Developer"
         }
     ],
