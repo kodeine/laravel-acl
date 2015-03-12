@@ -34,10 +34,13 @@ trait HasUserPermission
         ];
 
         if ( ! $slugs->has($alias) ) {
-            return $this->permissions()->create($array);
+            $new = $this->permissions()->create($array);
+            $this->permissions->push($new);
+            return $new;
         }
 
-        return $slugs[$alias]->update($array['slug']);
+        unset($array['name']);
+        return $slugs[$alias]->update($array);
     }
 
     public function removePermission($name)
@@ -91,10 +94,13 @@ trait HasUserPermission
         ];
 
         if ( ! $slugs->has($alias) ) {
-            return $this->permissions()->create($array);
+            $new = $this->permissions()->create($array);
+            $this->permissions->push($new);
+            return $new;
         }
 
-        return $slugs[$alias]->update($array['slug']);
+        unset($array['name']);
+        return $slugs[$alias]->update($array);
     }
 
     protected function extractAlias($str)

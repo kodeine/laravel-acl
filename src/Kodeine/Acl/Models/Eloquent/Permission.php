@@ -59,6 +59,9 @@ class Permission extends Model
         // if attribute is being updated.
         if ( isset($this->original['slug']) ) {
             $value = $value + json_decode($this->original['slug'], true);
+
+            // sort by key
+            ksort($value);
         }
 
         // remove null values.
