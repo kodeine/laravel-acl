@@ -37,7 +37,7 @@ trait HasUserPermission
             return $this->permissions()->create($array);
         }
 
-        return $slugs[$alias]->update($array['slug']);
+        return $slugs[$alias]->update($array);
     }
 
     public function removePermission($name)
