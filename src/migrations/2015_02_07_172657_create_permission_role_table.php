@@ -5,11 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreatePermissionRoleTable extends Migration
 {
-
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -25,12 +22,9 @@ class CreatePermissionRoleTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
         Schema::drop('permission_role');
     }
-
 }

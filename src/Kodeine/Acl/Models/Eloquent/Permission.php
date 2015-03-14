@@ -42,6 +42,7 @@ class Permission extends Model
 
     /**
      * @param $value
+     *
      * @return array
      */
     public function getSlugAttribute($value)
@@ -57,7 +58,7 @@ class Permission extends Model
         $value = is_array($value) ? $value : [$value => true];
 
         // if attribute is being updated.
-        if ( isset($this->original['slug']) ) {
+        if (isset($this->original['slug'])) {
             $value = $value + json_decode($this->original['slug'], true);
 
             // sort by key
@@ -70,5 +71,4 @@ class Permission extends Model
         // store as json.
         $this->attributes['slug'] = json_encode($value);
     }
-
 }

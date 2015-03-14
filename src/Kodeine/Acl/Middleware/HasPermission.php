@@ -10,46 +10,46 @@ class HasPermission
             'read'   => ['GET', 'HEAD', 'OPTIONS'],
             'view'   => ['GET', 'HEAD', 'OPTIONS'],
             'update' => ['PUT', 'PATCH'],
-            'delete' => ['DELETE']
+            'delete' => ['DELETE'],
         ],
         'resource'  => [
-            'create' => ['store'],
-            'read'   => ['index', 'create', 'show', 'edit'],
-            'view'   => ['index', 'create', 'show', 'edit'],
-            'update' => ['update'],
-            'delete' => ['destroy']
+            'create' => ['create', 'store'],
+            'store'  => ['create', 'store'],
+            'read'   => ['index', 'show'],
+            'view'   => ['index', 'show'],
+            'edit'   => ['edit', 'update'],
+            'update' => ['edit', 'update'],
+            'delete' => ['destroy'],
         ],
         'resources' => [
             'index', 'create', 'store',
-            'show', 'edit', 'update', 'destroy'
+            'show', 'edit', 'update', 'destroy',
         ],
     ];
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure                 $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $this->request = $request;
 
-        if ( ( ! $this->getAction('is') or $this->hasRole() ) and
-             ( ! $this->getAction('can') or $this->hasPermission() ) and
-             ( ! $this->getAction('protect_alias') or $this->protectMethods() )
-        ) {
+        if (! $this->routeHasAcl()) {
             return $next($request);
         }
 
-        if ( $request->isJson() || $request->wantsJson() ) {
+        if ($request->isJson() || $request->wantsJson()) {
             return response()->json([
                 'error' => [
                     'status_code' => 401,
                     'code'        => 'INSUFFICIENT_PERMISSIONS',
-                    'description' => 'You are not authorized to access this resource.'
-                ]
+                    'description' => 'You are not authorized to access this resource.',
+                ],
             ], 401);
         }
 
@@ -57,7 +57,7 @@ class HasPermission
     }
 
     /**
-     * Check if user has requested route role
+     * Check if user has requested route role.
      *
      * @return bool
      */
@@ -70,7 +70,7 @@ class HasPermission
     }
 
     /**
-     * Check if user has requested route permissions
+     * Check if user has requested route permissions.
      *
      * @return bool
      */
@@ -83,7 +83,7 @@ class HasPermission
     }
 
     /**
-     * Protect Crud functions of controller
+     * Protect Crud functions of controller.
      *
      * @return string
      */
@@ -96,12 +96,8 @@ class HasPermission
 
         // protection methods being passed in a route.
         $methods = $this->getAction('protect_methods');
-
-        // get method being called on controller.
-        $caller = $this->parseMethod();
-
-        // determine if we use resource or restful http method to protect crud.
-        $called = in_array($caller, $resources) ? $caller : $request->method();
+        $caller = $this->getControllerMethod();
+        $called = $this->defineHttpMethod($caller, $resources, $request);
 
         // if controller is a resource or closure
         // and does not have methods like
@@ -119,13 +115,13 @@ class HasPermission
         // crud method is read, view, delete etc
         // match it against our permissions
         // view.user or delete.user
-        $permission = last(array_keys($crud)) . '.' . $this->parseAlias();
+        $permission = last(array_keys($crud)).'.'.$this->parseAlias();
 
         return ! $this->forbiddenRoute() && $request->user()->can($permission);
     }
 
     /**
-     * Check if current route is hidden to current user role
+     * Check if current route is hidden to current user role.
      *
      * @return bool
      */
@@ -142,9 +138,10 @@ class HasPermission
     }
 
     /**
-     * Extract required action from requested route
+     * Extract required action from requested route.
      *
      * @param string $key action name
+     *
      * @return string
      */
     protected function getAction($key)
@@ -158,13 +155,13 @@ class HasPermission
      * Extract controller name, make it singular
      * to match it with model name to be able
      * to match against permissions view.user,
-     * create.user etc
+     * create.user etc.
      *
      * @return string
      */
     protected function parseAlias()
     {
-        if ( $alias = $this->getAction('protect_alias') ) {
+        if ($alias = $this->getAction('protect_alias')) {
             return $alias;
         }
 
@@ -179,18 +176,18 @@ class HasPermission
     }
 
     /**
-     * Extract controller method
+     * Extract controller method.
      *
      * @return string
      */
-    protected function parseMethod()
+    protected function getControllerMethod()
     {
         $action = $this->request->route()->getActionName();
 
         // parse index, store, create etc
-        if ( preg_match('/@([^\s].+)$/is', $action, $m) ) {
+        if (preg_match('/@([^\s].+)$/is', $action, $m)) {
             $controller = $m[1];
-            if ( $controller != 'Closure' ) {
+            if ($controller != 'Closure') {
                 return $controller;
             }
         }
@@ -198,4 +195,29 @@ class HasPermission
         return false;
     }
 
+    /**
+     * Check if the route has ACL.
+     *
+     * @return bool
+     */
+    private function routeHasAcl()
+    {
+        return ($this->getAction('is') || $this->hasRole())
+        && ($this->getAction('can') || $this->hasPermission())
+        && ($this->getAction('protect_alias') ||  $this->protectMethods());
+    }
+
+    /**
+     * Determine if we use resource or restful http method to protect crud.
+     *
+     * @param $caller
+     * @param $resources
+     * @param $request
+     *
+     * @return mixed
+     */
+    private function defineHttpMethod($caller, $resources, $request)
+    {
+        return in_array($caller, $resources) ? $caller : $request->method();
+    }
 }

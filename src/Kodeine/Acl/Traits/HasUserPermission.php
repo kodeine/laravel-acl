@@ -4,7 +4,6 @@ use Illuminate\Support\Collection;
 
 trait HasUserPermission
 {
-
     /*
     |----------------------------------------------------------------------
     | User Permission Trait Methods
@@ -17,11 +16,11 @@ trait HasUserPermission
         $slugs = $this->permissions->keyBy('name');
         list($slug, $alias) = $this->extractAlias($name);
 
-        if ( $slugs->has($alias) && is_null($slug) ) {
+        if ($slugs->has($alias) && is_null($slug)) {
             return true;
         }
 
-        if ( ! $slugs->has($alias) && is_null($slug) ) {
+        if (! $slugs->has($alias) && is_null($slug)) {
             return $this->addPermissionCrud($name);
         }
 
@@ -33,13 +32,15 @@ trait HasUserPermission
             'slug' => $this->addSlug($alias, $slug),
         ];
 
-        if ( ! $slugs->has($alias) ) {
+        if (! $slugs->has($alias)) {
             $new = $this->permissions()->create($array);
             $this->permissions->push($new);
+
             return $new;
         }
 
         unset($array['name']);
+
         return $slugs[$alias]->update($array);
     }
 
@@ -49,22 +50,21 @@ trait HasUserPermission
         list($slug, $alias) = $this->extractAlias($name);
 
         // remove whole alias
-        if ( $slugs->has($alias) && is_null($slug) ) {
+        if ($slugs->has($alias) && is_null($slug)) {
             return $slugs[$alias]->delete();
         }
 
         // remove slug only.
-        if ( $slugs->has($alias) && ! is_null($slug) ) {
+        if ($slugs->has($alias) && ! is_null($slug)) {
             $slug = is_array($slug) ? $slug : [$slug];
 
             return $slugs[$alias]->update([
-                'slug' => $this->removeSlug($alias, $slug)
+                'slug' => $this->removeSlug($alias, $slug),
             ]);
         }
 
         return true;
     }
-
 
     /*
     |----------------------------------------------------------------------
@@ -80,7 +80,7 @@ trait HasUserPermission
 
         $hasCrud = isset($slugs->get($alias)->slug['create']);
 
-        if ( $slugs->has($alias) && $hasCrud ) {
+        if ($slugs->has($alias) && $hasCrud) {
             return true;
         }
 
@@ -89,17 +89,19 @@ trait HasUserPermission
             'slug' => $this->addSlug($alias, [
                 'create' => true, 'read' => true,
                 'view'   => true, 'update' => true,
-                'delete' => true
-            ])
+                'delete' => true,
+            ]),
         ];
 
-        if ( ! $slugs->has($alias) ) {
+        if (! $slugs->has($alias)) {
             $new = $this->permissions()->create($array);
             $this->permissions->push($new);
+
             return $new;
         }
 
         unset($array['name']);
+
         return $slugs[$alias]->update($array);
     }
 
@@ -118,7 +120,7 @@ trait HasUserPermission
         $slugs = $this->permissions->lists('slug', 'name');
         $collection = new Collection($slugs);
 
-        if ( $collection->has($alias) ) {
+        if ($collection->has($alias)) {
             $permissions = $permissions + $collection->get($alias);
         }
 
@@ -132,12 +134,11 @@ trait HasUserPermission
         $slugs = $this->permissions->lists('slug', 'name');
         $collection = new Collection($slugs);
 
-        if ( $collection->has($alias) ) {
+        if ($collection->has($alias)) {
             $new = array_diff_key($collection->get($alias), array_flip($permissions));
             $collection->put($alias, $new);
         }
 
         return $collection->get($alias);
     }
-
 }
