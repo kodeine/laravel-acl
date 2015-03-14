@@ -17,8 +17,8 @@
     "autoload": {
         "classmap": [
         ],
-        "psr-0": {
-            "Kodeine\\Acl\\": "src/"
+        "psr-4": {
+            "Kodeine\\Acl\\": "src/Kodeine"
         }
     },
     "minimum-stability": "stable",

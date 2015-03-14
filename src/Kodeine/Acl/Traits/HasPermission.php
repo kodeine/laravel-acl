@@ -47,7 +47,8 @@ trait HasPermission
     /**
      * Check if user has the given permission.
      *
-     * @param  string $permission
+     * @param string $permission
+     *
      * @return bool
      */
     public function can($permission)
@@ -67,7 +68,8 @@ trait HasPermission
     /**
      * Assigns the given permission to the user.
      *
-     * @param  object|array|string|int $permission
+     * @param object|array|string|int $permission
+     *
      * @return bool
      */
     public function assignPermission($permission)
@@ -76,7 +78,7 @@ trait HasPermission
 
             $permissionId = $this->parsePermissionId($permission);
 
-            if ( ! $this->permissions->keyBy('id')->has($permissionId) ) {
+            if (! $this->permissions->keyBy('id')->has($permissionId)) {
                 $this->permissions()->attach($permissionId);
 
                 return $permission;
@@ -89,7 +91,8 @@ trait HasPermission
     /**
      * Revokes the given permission from the user.
      *
-     * @param  object|array|string|int $permission
+     * @param object|array|string|int $permission
+     *
      * @return bool
      */
     public function revokePermission($permission)
@@ -105,7 +108,8 @@ trait HasPermission
     /**
      * Syncs the given permission(s) with the user.
      *
-     * @param  object|array|string|int $permissions
+     * @param object|array|string|int $permissions
+     *
      * @return bool
      */
     public function syncPermissions($permissions)
@@ -138,30 +142,29 @@ trait HasPermission
     |
     */
 
-
     /**
      * Parses permission id from object or array.
      *
      * @param object|array|int $permission
+     *
      * @return mixed
      */
     protected function parsePermissionId($permission)
     {
-        if ( is_string($permission) || is_numeric($permission) ) {
-
+        if (is_string($permission) || is_numeric($permission)) {
             $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
             $key = is_numeric($permission) ? 'id' : 'name';
-            $alias = (new $model)->where($key, $permission)->first();
+            $alias = (new $model())->where($key, $permission)->first();
 
-            if ( ! is_object($alias) || ! $alias->exists ) {
-                throw new \InvalidArgumentException('Specified permission ' . $key . ' does not exists.');
+            if (! is_object($alias) || ! $alias->exists) {
+                throw new \InvalidArgumentException('Specified permission '.$key.' does not exists.');
             }
 
             $permission = $alias->getKey();
         }
 
         $model = '\Illuminate\Database\Eloquent\Model';
-        if ( is_object($permission) && $permission instanceof $model ) {
+        if (is_object($permission) && $permission instanceof $model) {
             $permission = $permission->getKey();
         }
 

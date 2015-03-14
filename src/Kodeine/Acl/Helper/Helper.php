@@ -1,9 +1,7 @@
 <?php namespace Kodeine\Acl\Helper;
 
-
 trait Helper
 {
-
     /*
     |----------------------------------------------------------------------
     | Slug Permission Related Protected Methods
@@ -16,10 +14,12 @@ trait Helper
         $data = [];
         //$permissions = $this->permissions->lists('slug', 'name');
         foreach ($permissions as $alias => $perm) {
-            if ( ! is_array($perm) ) continue;
+            if (! is_array($perm)) {
+                continue;
+            }
             foreach ($perm as $key => $value) {
                 //if ( (bool) $value == false ) continue;
-                $slug = $key . '.' . $alias;
+                $slug = $key.'.'.$alias;
                 $data[$slug] = $value;
                 //$data[] = $slug;
             }
@@ -39,11 +39,11 @@ trait Helper
     {
         // if its an array lets use
         // and operator by default
-        if ( is_array($str) ) {
+        if (is_array($str)) {
             $str = implode(',', $str);
         }
 
-        if ( preg_match('/([,|])(?:\s+)?/', $str, $m) ) {
+        if (preg_match('/([,|])(?:\s+)?/', $str, $m)) {
             return $m[1] == '|' ? 'or' : 'and';
         }
 
@@ -53,14 +53,15 @@ trait Helper
     /**
      * Converts strings having comma
      * or pipe to an array in
-     * lowercase
+     * lowercase.
      *
      * @param $str
+     *
      * @return array
      */
     protected function hasDelimiterToArray($str)
     {
-        if ( is_string($str) && preg_match('/[,|]/is', $str) ) {
+        if (is_string($str) && preg_match('/[,|]/is', $str)) {
             return preg_split('/ ?[,|] ?/', strtolower($str));
         }
 
@@ -72,6 +73,7 @@ trait Helper
     /**
      * @param          $item
      * @param callable $closure
+     *
      * @return array
      */
     protected function mapArray($item, \Closure $closure)
@@ -79,12 +81,13 @@ trait Helper
         $item = $this->hasDelimiterToArray($item);
 
         // multiple items
-        if ( is_array($item) ) {
+        if (is_array($item)) {
             // is an array of One Role/Permission
             // its an array containing id
             // we dont have to loop through
-            if ( isset($item['id']) )
+            if (isset($item['id'])) {
                 return $closure((int) $item['id']);
+            }
 
             // is an array of slugs
             return array_map($closure, $item);
@@ -93,5 +96,4 @@ trait Helper
         // single item
         return $closure($item);
     }
-
 }

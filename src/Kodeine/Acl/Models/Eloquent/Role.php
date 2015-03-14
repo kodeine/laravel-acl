@@ -32,7 +32,7 @@ class Role extends Model
     }
 
     /**
-     * List all permissions
+     * List all permissions.
      *
      * @return mixed
      */
@@ -46,6 +46,7 @@ class Role extends Model
      *
      * @param string $permission
      * @param array  $mergePermissions
+     *
      * @return bool
      */
     public function can($permission, $operator = null, $mergePermissions = [])
@@ -60,14 +61,13 @@ class Role extends Model
         $permissions = $this->toDotPermissions($permissions);
 
         // validate permissions array
-        if ( is_array($permission) ) {
-
-            if ( ! in_array($operator, ['and', 'or']) ) {
+        if (is_array($permission)) {
+            if (! in_array($operator, ['and', 'or'])) {
                 $e = 'Invalid operator, available operators are "and", "or".';
                 throw new \InvalidArgumentException($e);
             }
 
-            $call = 'canWith' . ucwords($operator);
+            $call = 'canWith'.ucwords($operator);
 
             return $this->$call($permission, $permissions);
         }
@@ -79,12 +79,13 @@ class Role extends Model
     /**
      * @param $permission
      * @param $permissions
+     *
      * @return bool
      */
     protected function canWithAnd($permission, $permissions)
     {
         foreach ($permission as $check) {
-            if ( ! in_array($check, $permissions) || ! isset($permissions[$check]) || $permissions[$check] != true ) {
+            if (! in_array($check, $permissions) || ! isset($permissions[$check]) || $permissions[$check] != true) {
                 return false;
             }
         }
@@ -95,17 +96,17 @@ class Role extends Model
     /**
      * @param $permission
      * @param $permissions
+     *
      * @return bool
      */
     protected function canWithOr($permission, $permissions)
     {
         foreach ($permission as $check) {
-            if ( in_array($check, $permissions) && isset($permissions[$check]) && $permissions[$check] == true ) {
+            if (in_array($check, $permissions) && isset($permissions[$check]) && $permissions[$check] == true) {
                 return true;
             }
         }
 
         return false;
     }
-
 }
