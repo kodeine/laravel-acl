@@ -45,23 +45,24 @@ trait HasPermission
     }
 
     /**
-     * Check if user has the given permission.
+     * Check if User has the given permission.
      *
      * @param  string $permission
+     * @param  string $operator
      * @return bool
      */
-    public function can($permission)
+    public function can($permission, $operator = null)
     {
         // user permissions including
         // all of user role permissions
         $merge = $this->getPermissions();
 
-        // get first role and use can method
-        // $merge already has all user role
-        // permissions.
-        $role = $this->roles->first();
+        // lets call our base can() method
+        // from role class. $merge already
+        // has user & role permissions
+        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
 
-        return ! is_null($role) && $role->can($permission, null, $merge);
+        return (new $model)->can($permission, $operator, $merge);
     }
 
     /**
