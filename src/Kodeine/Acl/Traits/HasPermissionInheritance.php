@@ -18,7 +18,7 @@ trait HasPermissionInheritance
         $inherits = $this->permissions->lists('inherit_id', 'name');
 
         foreach ($inherits as $name => $inherit_id) {
-            if ( ! $inherit_id ) continue;
+            if ( is_null($inherit_id) ) continue;
 
             // get inherit row from cache else query it.
             $inherit = $this->getCacheInherit($inherit_id);

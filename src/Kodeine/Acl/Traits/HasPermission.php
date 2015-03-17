@@ -34,11 +34,11 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = $this->getPermissionsInherited();
+        $permissions = $this->permissions->lists('slug', 'name');
 
         // permissions based on role.
         foreach ($this->roles as $role) {
-            $permissions = $permissions + $role->getPermissions();
+            $permissions = array_replace_recursive($role->getPermissions(), $permissions);
         }
 
         return $permissions;
