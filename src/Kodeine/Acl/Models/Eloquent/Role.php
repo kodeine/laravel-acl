@@ -45,12 +45,13 @@ class Role extends Model
      * Checks if the role has the given permission.
      *
      * @param string $permission
+     * @param string $operator
      * @param array  $mergePermissions
      * @return bool
      */
     public function can($permission, $operator = null, $mergePermissions = [])
     {
-        $operator = is_null(null) ? $this->parseOperator($permission) : $operator;
+        $operator = is_null($operator) ? $this->parseOperator($permission) : $operator;
 
         $permission = $this->hasDelimiterToArray($permission);
         $permissions = $this->getPermissions() + $mergePermissions;

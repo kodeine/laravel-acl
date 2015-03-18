@@ -39,11 +39,11 @@ trait Helper
     {
         // if its an array lets use
         // and operator by default
-        if (is_array($str)) {
+        if ( is_array($str) ) {
             $str = implode(',', $str);
         }
 
-        if (preg_match('/([,|])(?:\s+)?/', $str, $m)) {
+        if ( preg_match('/([,|])(?:\s+)?/', $str, $m) ) {
             return $m[1] == '|' ? 'or' : 'and';
         }
 
@@ -65,7 +65,8 @@ trait Helper
         }
 
         return is_array($str) ?
-            array_filter($str, 'strtolower') : strtolower($str);
+            array_filter($str, 'strtolower') : is_object($str) ?
+                $str : strtolower($str);
     }
 
     /**
@@ -79,7 +80,7 @@ trait Helper
 
         // multiple items
         if ( is_array($item) ) {
-            // is an array of One Role
+            // is an array of One Role/Permission
             // its an array containing id
             // we dont have to loop through
             if ( isset($item['id']) )
