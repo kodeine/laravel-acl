@@ -10,20 +10,27 @@ class HasPermission
             'read'   => ['GET', 'HEAD', 'OPTIONS'],
             'view'   => ['GET', 'HEAD', 'OPTIONS'],
             'update' => ['PUT', 'PATCH'],
-            'delete' => ['DELETE']
+            'delete' => ['DELETE'],
         ],
         'resource'  => [
-            'create' => ['store'],
-            'read'   => ['index', 'create', 'show', 'edit'],
-            'view'   => ['index', 'create', 'show', 'edit'],
-            'update' => ['update'],
-            'delete' => ['destroy']
+            'create' => ['create', 'store'],
+            'store'  => ['create', 'store'],
+            'read'   => ['index', 'show'],
+            'view'   => ['index', 'show'],
+            'edit'   => ['edit', 'update'],
+            'update' => ['edit', 'update'],
+            'delete' => ['destroy'],
         ],
         'resources' => [
             'index', 'create', 'store',
-            'show', 'edit', 'update', 'destroy'
+            'show', 'edit', 'update', 'destroy',
         ],
     ];
+
+    /*public function __construct()
+    {
+        $this->crudConfigOverride();
+    }*/
 
     /**
      * Handle an incoming request.
@@ -35,10 +42,11 @@ class HasPermission
     public function handle($request, Closure $next)
     {
         $this->request = $request;
+        $this->crudConfigOverride();
 
-        if ( ( ! $this->getAction('is') or $this->hasRole() ) and
-             ( ! $this->getAction('can') or $this->hasPermission() ) and
-             ( ! $this->getAction('protect_alias') or $this->protectMethods() )
+        if ( ( ! $this->getAction('is') or $this->hasRole()) and
+            ( ! $this->getAction('can') or $this->hasPermission()) and
+            ( ! $this->getAction('protect_alias') or $this->protectMethods())
         ) {
             return $next($request);
         }
@@ -49,7 +57,7 @@ class HasPermission
                     'status_code' => 401,
                     'code'        => 'INSUFFICIENT_PERMISSIONS',
                     'description' => 'You are not authorized to access this resource.'
-                ]
+                ],
             ], 401);
         }
 
@@ -57,7 +65,7 @@ class HasPermission
     }
 
     /**
-     * Check if user has requested route role
+     * Check if user has requested route role.
      *
      * @return bool
      */
@@ -70,7 +78,7 @@ class HasPermission
     }
 
     /**
-     * Check if user has requested route permissions
+     * Check if user has requested route permissions.
      *
      * @return bool
      */
@@ -83,7 +91,7 @@ class HasPermission
     }
 
     /**
-     * Protect Crud functions of controller
+     * Protect Crud functions of controller.
      *
      * @return string
      */
@@ -125,7 +133,7 @@ class HasPermission
     }
 
     /**
-     * Check if current route is hidden to current user role
+     * Check if current route is hidden to current user role.
      *
      * @return bool
      */
@@ -142,7 +150,7 @@ class HasPermission
     }
 
     /**
-     * Extract required action from requested route
+     * Extract required action from requested route.
      *
      * @param string $key action name
      * @return string
@@ -158,7 +166,7 @@ class HasPermission
      * Extract controller name, make it singular
      * to match it with model name to be able
      * to match against permissions view.user,
-     * create.user etc
+     * create.user etc.
      *
      * @return string
      */
@@ -196,6 +204,22 @@ class HasPermission
         }
 
         return false;
+    }
+
+    /**
+     * Override crud property via config.
+     */
+    protected function crudConfigOverride()
+    {
+        // Override crud restful from config.
+        if (($restful = config('acl.crud.restful')) != null) {
+            $this->crud['restful'] = $restful;
+        }
+
+        // Override crud resource from config.
+        if (($resource = config('acl.crud.resource')) != null) {
+            $this->crud['resource'] = $resource;
+        }
     }
 
 }

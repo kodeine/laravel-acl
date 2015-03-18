@@ -54,6 +54,12 @@ class Permission extends Model
      */
     public function setSlugAttribute($value)
     {
+        // if nothing being set, clear slug
+        if (empty($value)) {
+            $this->attributes['slug'] = '[]';
+            return ;
+        }
+
         $value = is_array($value) ? $value : [$value => true];
 
         // if attribute is being updated.
