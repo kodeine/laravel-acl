@@ -27,11 +27,6 @@ class HasPermission
         ],
     ];
 
-    /*public function __construct()
-    {
-        $this->crudConfigOverride();
-    }*/
-
     /**
      * Handle an incoming request.
      *
@@ -44,7 +39,7 @@ class HasPermission
         $this->request = $request;
         $this->crudConfigOverride();
 
-        if ( ( ! $this->getAction('is') or $this->hasRole()) and
+        if (( ! $this->getAction('is') or $this->hasRole()) and
             ( ! $this->getAction('can') or $this->hasPermission()) and
             ( ! $this->getAction('protect_alias') or $this->protectMethods())
         ) {
@@ -216,12 +211,12 @@ class HasPermission
     protected function crudConfigOverride()
     {
         // Override crud restful from config.
-        if (($restful = config('acl.crud.restful')) != null) {
+        if ( ($restful = config('acl.crud.restful')) != null ) {
             $this->crud['restful'] = $restful;
         }
 
         // Override crud resource from config.
-        if (($resource = config('acl.crud.resource')) != null) {
+        if ( ($resource = config('acl.crud.resource')) != null ) {
             $this->crud['resource'] = $resource;
         }
     }
