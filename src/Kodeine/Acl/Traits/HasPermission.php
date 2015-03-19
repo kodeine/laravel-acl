@@ -34,7 +34,7 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = $this->permissions->lists('slug', 'name');
+        $permissions = $this->getPermissionsInherited();
 
         // permissions based on role.
         foreach ($this->roles as $role) {
