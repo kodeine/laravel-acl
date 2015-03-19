@@ -37,8 +37,11 @@ class HasPermission
     public function handle($request, Closure $next)
     {
         $this->request = $request;
+
+        // override crud resources via config
         $this->crudConfigOverride();
 
+        // if route has access
         if (( ! $this->getAction('is') or $this->hasRole()) and
             ( ! $this->getAction('can') or $this->hasPermission()) and
             ( ! $this->getAction('protect_alias') or $this->protectMethods())
