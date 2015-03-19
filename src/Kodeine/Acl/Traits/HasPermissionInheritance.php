@@ -165,7 +165,7 @@ trait HasPermissionInheritance
      * @param object|array|int $permission
      * @return mixed
      */
-    protected function parsePermissionId($permission)
+    /*protected function parsePermissionId($permission)
     {
         if ( is_string($permission) || is_numeric($permission) ) {
 
@@ -186,6 +186,6 @@ trait HasPermissionInheritance
         }
 
         return (int) $permission;
-    }
+    }*/
 
 }
