@@ -16,7 +16,7 @@ Follow along the [Wiki](https://github.com/kodeine/laravel-acl/wiki) to find out
 
 #### Recent Changes
 
-> March 28, 2015.
+> **March 28, 2015.**
 
 * Added Role Scope to get all users having a specific role. e.g `User::role('admin')->get();` will list all users having `admin` role.
 
