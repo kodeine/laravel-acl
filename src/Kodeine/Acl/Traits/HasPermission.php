@@ -37,8 +37,19 @@ trait HasPermission
         $permissions = $this->getPermissionsInherited();
 
         // permissions based on role.
+        // more permissive permission wins
+        // if user has multiple roles we keep
+        // true values.
         foreach ($this->roles as $role) {
-            $permissions = array_replace_recursive($role->getPermissions(), $permissions);
+            foreach ($role->getPermissions() as $slug => $array) {
+                if ( array_key_exists($slug, $permissions) ) {
+                    foreach ($array as $clearance => $value) {
+                        ! $value ?: $permissions[$slug][$clearance] = true;
+                    }
+                } else {
+                    $permissions = array_merge($permissions, [$slug => $array]);
+                }
+            }
         }
 
         return $permissions;
