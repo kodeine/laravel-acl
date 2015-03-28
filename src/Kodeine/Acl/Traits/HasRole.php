@@ -35,6 +35,21 @@ trait HasRole
     }
 
     /**
+     * Scope to select users having a specific
+     * role. Role can be an id or slug.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|string                            $role
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRole($query, $role)
+    {
+        return $query->whereHas('roles', function ($query) use ($role) {
+            $query->where(is_numeric($role) ? 'id' : 'slug', $role);
+        });
+    }
+
+    /**
      * Checks if the user has the given role.
      *
      * @param  string $slug
