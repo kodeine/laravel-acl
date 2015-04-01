@@ -35,8 +35,9 @@ class HasPermission
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure                 $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -44,19 +45,19 @@ class HasPermission
         $this->request = $request;
         $this->crudConfigOverride();
 
-        if ( ( ! $this->getAction('is') or $this->hasRole()) and
-            ( ! $this->getAction('can') or $this->hasPermission()) and
-            ( ! $this->getAction('protect_alias') or $this->protectMethods())
+        if ((! $this->getAction('is') or $this->hasRole()) and
+            (! $this->getAction('can') or $this->hasPermission()) and
+            (! $this->getAction('protect_alias') or $this->protectMethods())
         ) {
             return $next($request);
         }
 
-        if ( $request->isJson() || $request->wantsJson() ) {
+        if ($request->isJson() || $request->wantsJson()) {
             return response()->json([
                 'error' => [
                     'status_code' => 401,
                     'code'        => 'INSUFFICIENT_PERMISSIONS',
-                    'description' => 'You are not authorized to access this resource.'
+                    'description' => 'You are not authorized to access this resource.',
                 ],
             ], 401);
         }
@@ -127,7 +128,7 @@ class HasPermission
         // crud method is read, view, delete etc
         // match it against our permissions
         // view.user or delete.user
-        $permission = last(array_keys($crud)) . '.' . $this->parseAlias();
+        $permission = last(array_keys($crud)).'.'.$this->parseAlias();
 
         return ! $this->forbiddenRoute() && $request->user()->can($permission);
     }
@@ -153,6 +154,7 @@ class HasPermission
      * Extract required action from requested route.
      *
      * @param string $key action name
+     *
      * @return string
      */
     protected function getAction($key)
@@ -172,7 +174,7 @@ class HasPermission
      */
     protected function parseAlias()
     {
-        if ( $alias = $this->getAction('protect_alias') ) {
+        if ($alias = $this->getAction('protect_alias')) {
             return $alias;
         }
 
@@ -187,7 +189,7 @@ class HasPermission
     }
 
     /**
-     * Extract controller method
+     * Extract controller method.
      *
      * @return string
      */
@@ -196,9 +198,9 @@ class HasPermission
         $action = $this->request->route()->getActionName();
 
         // parse index, store, create etc
-        if ( preg_match('/@([^\s].+)$/is', $action, $m) ) {
+        if (preg_match('/@([^\s].+)$/is', $action, $m)) {
             $controller = $m[1];
-            if ( $controller != 'Closure' ) {
+            if ($controller != 'Closure') {
                 return $controller;
             }
         }
@@ -221,5 +223,4 @@ class HasPermission
             $this->crud['resource'] = $resource;
         }
     }
-
 }

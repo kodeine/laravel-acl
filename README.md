@@ -89,7 +89,7 @@ Follow along the [Wiki](https://github.com/kodeine/laravel-acl/wiki) to find out
 
 # <a name="roadmap"></a>Roadmap
 
-Here's the TODO list for the next release (1.0).
+Here's the TODO list for the next release (**1.0**).
 
 * [ ] Refactoring the source code.
 * [ ] Correct all issues.

@@ -13,8 +13,6 @@ class AclServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -24,8 +22,6 @@ class AclServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register()
     {
@@ -33,22 +29,22 @@ class AclServiceProvider extends ServiceProvider
     }
 
     /**
-     * Publish the config file to the application config directory
+     * Publish the config file to the application config directory.
      */
     public function publishConfig()
     {
         $this->publishes([
-            __DIR__ . '/../../config/acl.php' => config_path('acl.php'),
+            __DIR__.'/../../config/acl.php' => config_path('acl.php'),
         ], 'config');
     }
 
     /**
-     * Publish the migration to the application migration folder
+     * Publish the migration to the application migration folder.
      */
     public function publishMigration()
     {
         $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('/database/migrations'),
+            __DIR__.'/../../migrations/' => base_path('/database/migrations'),
         ], 'migrations');
     }
 }
