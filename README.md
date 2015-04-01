@@ -29,77 +29,81 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 
 # <a name="getting-started"></a>Getting Started
 
- 1. Require the package in your `composer.json` and update your dependency with `composer update`:
+1. Require the package in your `composer.json` and update your dependency with `composer update`:
 
-```
+    ```
     "require": {
         ...
         "kodeine/laravel-acl": "~0.1@dev",
         ...
     },
+    ```
 
-```
+2. Add the package to your application service providers in `config/app.php`.
 
- 2. Add the package to your application service providers in `config/app.php`.
+    ```php
+    'providers' => [
 
-```php
-'providers' => [
+        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+        'Illuminate\Auth\AuthServiceProvider',
+        ...
+        'Kodeine\Acl\AclServiceProvider',
 
-    'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-    'Illuminate\Auth\AuthServiceProvider',
-    ...
-    'Kodeine\Acl\AclServiceProvider',
+    ],
+    ```
 
-],
-```
+3. Publish the package migrations to your application and run these with `php artisan migrate.
 
- 3. Publish the package migrations to your application and run these with `php artisan migrate.
+    ```
+    $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
+    ```
 
-```
-$ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
-```
+    > **Use your own models.**  
+    > Once you publish, it publishes the configuration file where you can define your own models which should extend to Acl models.
 
->**Use your own models.**
->Once you publish, it publishes the configuration file where you can define your own models which should extend to Acl models.
+4. Add the middleware to your `app/Http/Kernel.php`.
 
- 4. Add the middleware to your `app/Http/Kernel.php`.
+    ```php
+    protected $routeMiddleware = [
 
-```php
-protected $routeMiddleware = [
+        ....
+        'acl' => 'Kodeine\Acl\Middleware\HasPermission',
 
-    ....
-    'acl' => 'Kodeine\Acl\Middleware\HasPermission',
+    ];
+    ```
 
-];
-```
+5. Add the HasRole trait to your `User` model.
 
- 5. Add the HasRole trait to your `User` model.
+    ```php
+    use Kodeine\Acl\Traits\HasRole;
 
-```php
-use Kodeine\Acl\Traits\HasRole;
-
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
-{
-    use Authenticatable, CanResetPassword, HasRole;
-}
-```
+    class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+    {
+        use Authenticatable, CanResetPassword, HasRole;
+    }
+    ```
 
 # <a name="documentation"></a>Documentation
 
 Follow along the [Wiki](https://github.com/kodeine/laravel-acl/wiki) to find out more.
 
+# <a name="roadmap"></a>Roadmap
+
+Here's the TODO list for the next release (1.0).
+
+* [ ] Refactoring the source code.
+* [ ] Correct all issues.
+* [ ] Adding cache to final user permissions.
+* [ ] Adding tests.
+
 # <a name="change-logs"></a>Change Logs
 
-> **March 28, 2015 (new)**
+**March 28, 2015 (latest)**
+* [x] Added Role Scope to get all users having a specific role. e.g `User::role('admin')->get();` will list all users having `admin` role.
 
-* Added Role Scope to get all users having a specific role. e.g `User::role('admin')->get();` will list all users having `admin` role.
-
-> March 7, 2015.
-
-
-* `is()` and `can()` methods now support comma for `AND` and pipe as `OR` operator. Or pass an operator as a second param. [more here...](https://github.com/kodeine/laravel-acl/wiki/Validate-Permissions-and-Roles)
-* Permissions inheritance
-    * You can bind multiple permissions together so they inherit ones permission. [more here...](https://github.com/kodeine/laravel-acl/wiki/Permissions-Inheritance)
+*March 7, 2015*
+* [x] `is()` and `can()` methods now support comma for `AND` and pipe as `OR` operator. Or pass an operator as a second param. [more information](https://github.com/kodeine/laravel-acl/wiki/Validate-Permissions-and-Roles)
+* [x] You can bind multiple permissions together so they inherit ones permission. [more information](https://github.com/kodeine/laravel-acl/wiki/Permissions-Inheritance) 
 
 # <a name="contribution-guidelines"></a>Contribution Guidelines
 
