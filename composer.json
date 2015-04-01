@@ -11,14 +11,14 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.x|~5.0",
-        "illuminate/database": "4.2.x|~5.0"
+        "illuminate/support": "~5.0",
+        "illuminate/database": "~5.0"
     },
     "autoload": {
         "classmap": [
         ],
-        "psr-0": {
-            "Kodeine\\Acl\\": "src/"
+        "psr-4": {
+            "Kodeine\\Acl\\": "src/Kodeine"
         }
     },
     "minimum-stability": "stable",
