@@ -5,11 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreatePermissionsTable extends Migration
 {
-
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -26,12 +23,9 @@ class CreatePermissionsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
         Schema::drop('permissions');
     }
-
 }
