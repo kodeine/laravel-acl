@@ -21,14 +21,6 @@ class AclServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any application services.
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
      * Publish the config file to the application config directory.
      */
     public function publishConfig()
