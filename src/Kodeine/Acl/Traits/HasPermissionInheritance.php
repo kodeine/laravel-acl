@@ -48,7 +48,7 @@ trait HasPermissionInheritance
             $merge = $permissions->where('name', $row->name)->lists('slug', 'name');
 
             // replace and merge permissions
-            $rights = array_replace_recursive($inherited, $merge);
+            $rights = array_replace_recursive($rights, $inherited, $merge);
 
             // make sure we don't unset if
             // inherited & slave permission
