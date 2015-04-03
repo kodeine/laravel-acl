@@ -14,7 +14,7 @@ trait HasPermissionInheritance
 
     public function getPermissionsInherited()
     {
-        $rights = [];
+        $result = [];
         $permissions = $this->permissions;
 
         // ntfs permissions
@@ -31,7 +31,7 @@ trait HasPermissionInheritance
         };
 
         foreach ($permissions as $row) {
-
+            $rights = [];
             // permissions without inherit ids
             if ( is_null($row->inherit_id) || ! $row->inherit_id ) {
 
@@ -55,10 +55,10 @@ trait HasPermissionInheritance
             // have same names
             if ( key($inherited) != $row->name )
                 unset($rights[$row->name]);
-
+            $result=array_merge($result,$rights)
         }
 
-        return $rights;
+        return $result;
     }
 
     /**
