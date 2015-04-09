@@ -127,7 +127,11 @@ class HasPermission
         // crud method is read, view, delete etc
         // match it against our permissions
         // view.user or delete.user
-        $permission = last(array_keys($crud)) . '.' . $this->parseAlias();
+        // multiple keys like create,store?
+        // use OR operator and join keys with alias.
+        $permission = implode('|', array_map(function ($e) {
+            return $e . '.' . $this->parseAlias();
+        }, array_keys($crud)));
 
         return ! $this->forbiddenRoute() && $request->user()->can($permission);
     }
