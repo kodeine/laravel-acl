@@ -57,7 +57,7 @@ trait HasRole
      */
     public function is($slug, $operator = null)
     {
-        $operator = is_null(null) ? $this->parseOperator($slug) : $operator;
+        $operator = is_null($operator) ? $this->parseOperator($slug) : $operator;
 
         $roles = $this->getRoles();
         $slug = $this->hasDelimiterToArray($slug);
