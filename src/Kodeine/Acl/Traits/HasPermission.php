@@ -1,6 +1,7 @@
 <?php namespace Kodeine\Acl\Traits;
 
 use Kodeine\Acl\Helper\Helper;
+use Illuminate\Support\Collection;
 
 trait HasPermission
 {
@@ -79,11 +80,15 @@ trait HasPermission
     /**
      * Assigns the given permission to the user.
      *
-     * @param  object|array|string|int $permission
+     * @param  object|array|string|int|Collection $permission
      * @return bool
      */
     public function assignPermission($permission)
     {
+        if($permission instanceof Collection) {
+            $permission = $permission->lists('name');
+        }
+        
         return $this->mapArray($permission, function ($permission) {
 
             $permissionId = $this->parsePermissionId($permission);
@@ -101,11 +106,15 @@ trait HasPermission
     /**
      * Revokes the given permission from the user.
      *
-     * @param  object|array|string|int $permission
+     * @param  object|array|string|int|Collection $permission
      * @return bool
      */
     public function revokePermission($permission)
     {
+        if($permission instanceof Collection) {
+            $permission = $permission->lists('name');
+        }
+        
         return $this->mapArray($permission, function ($permission) {
 
             $permissionId = $this->parsePermissionId($permission);
@@ -117,11 +126,15 @@ trait HasPermission
     /**
      * Syncs the given permission(s) with the user.
      *
-     * @param  object|array|string|int $permissions
+     * @param  object|array|string|int|Collection $permissions
      * @return bool
      */
     public function syncPermissions($permissions)
     {
+        if($permissions instanceof Collection) {
+            $permissions = $permissions->lists('name');
+        }
+        
         $sync = [];
         $this->mapArray($permissions, function ($permission) use (&$sync) {
 
