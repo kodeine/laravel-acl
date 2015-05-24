@@ -84,7 +84,8 @@ trait Helper
             // its an array containing id
             // we dont have to loop through
             if ( isset($item['id']) )
-                return $closure((int) $item['id']);
+                //return $closure((int) $item['id']);
+                return $closure($item['id']); //uuid is not (int)
 
             // is an array of slugs
             return array_map($closure, $item);

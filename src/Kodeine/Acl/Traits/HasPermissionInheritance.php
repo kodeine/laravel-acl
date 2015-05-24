@@ -170,9 +170,14 @@ trait HasPermissionInheritance
         if ( is_string($permission) || is_numeric($permission) ) {
 
             $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
-            $key = is_numeric($permission) ? 'id' : 'name';
-            $alias = (new $model)->where($key, $permission)->first();
 
+            if ((strlen((string) $permission) == 36) && (substr_count((string) $permission, '-') == 4)) {
+                        $key = 'id'; //uuid
+            }else{
+                        $key = is_numeric($permission) ? 'id' : 'name';
+            }
+
+            $alias = (new $model)->where($key, $permission)->first();
             if ( ! is_object($alias) || ! $alias->exists ) {
                 throw new \InvalidArgumentException('Specified permission ' . $key . ' does not exists.');
             }
@@ -185,7 +190,8 @@ trait HasPermissionInheritance
             $permission = $permission->getKey();
         }
 
-        return (int) $permission;
+        //return (int) $permission;
+        return $permission; //uuid is not (int)
     }*/
 
 }
