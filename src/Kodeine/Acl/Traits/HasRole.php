@@ -197,9 +197,14 @@ trait HasRole
         if ( is_string($role) || is_numeric($role) ) {
 
             $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
-            $key = is_numeric($role) ? 'id' : 'slug';
-            $alias = (new $model)->where($key, $role)->first();
 
+            if ((strlen((string) $role) == 36) && (substr_count((string) $role, '-') == 4)) {
+                        $key = 'id'; //uuid
+            }else{
+                        $key = is_numeric($role) ? 'id' : 'slug';
+            }
+
+            $alias = (new $model)->where($key, $role)->first();
             if ( ! is_object($alias) || ! $alias->exists ) {
                 throw new \InvalidArgumentException('Specified role ' . $key . ' does not exists.');
             }
@@ -212,7 +217,8 @@ trait HasRole
             $role = $role->getKey();
         }
 
-        return (int) $role;
+        //return (int) $role;
+        return $role; //uuid is not (int)
     }
 
     /*
