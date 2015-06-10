@@ -229,7 +229,7 @@ trait HasRole
      * @param  array  $arguments
      * @return mixed
      */
-    public function __call($method, $arguments = [])
+    public function __call($method, $arguments)
     {
         // Handle isRoleSlug() methods
         if ( starts_with($method, 'is') and $method !== 'is' and ! starts_with($method, 'isWith') ) {
