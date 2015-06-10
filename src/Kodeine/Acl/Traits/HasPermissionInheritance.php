@@ -33,7 +33,7 @@ trait HasPermissionInheritance
         foreach ($permissions as $row) {
 
             // permissions without inherit ids
-            if ( is_null($row->inherit_id) || ! $row->inherit_id ) {
+            if ( is_null($row->inherit_id) || !$row->inherit_id ) {
 
                 // ntfs determination
                 $letNtfs($row->name, $row->slug);
@@ -45,7 +45,10 @@ trait HasPermissionInheritance
 
             // process inherit_id recursively
             $inherited = $this->getRecursiveInherit($row->inherit_id, $row->slug);
-            $merge = $permissions->where('name', $row->name)->lists('slug', 'name');
+            $merge = $permissions
+                ->where('name', $row->name)
+                ->lists('slug', 'name')
+                ->toArray();
 
             // replace and merge permissions
             $rights = array_replace_recursive($rights, $inherited, $merge);
@@ -97,7 +100,7 @@ trait HasPermissionInheritance
             $permissions = array_replace_recursive($inherit->slug, $permissions, $tmp);
 
             // follow along into deeper inherited permissions recursively
-            while ($inherit && $inherit->inherit_id > 0 && ! is_null($inherit->inherit_id)) {
+            while ($inherit && $inherit->inherit_id > 0 && !is_null($inherit->inherit_id)) {
 
                 // get inherit permission from cache or sql.
                 $inherit = $this->getInherit($inherit->inherit_id);
