@@ -31,7 +31,11 @@ trait HasRole
      */
     public function getRoles()
     {
-        return is_null($this->roles) ? [] : $this->roles->lists('slug');
+        return is_null($this->roles)
+            ? []
+            : $this->roles
+                ->lists('slug')
+                ->toArray();
     }
 
     /**
@@ -65,7 +69,7 @@ trait HasRole
         // array of slugs
         if ( is_array($slug) ) {
 
-            if ( ! in_array($operator, ['and', 'or']) ) {
+            if ( !in_array($operator, ['and', 'or']) ) {
                 $e = 'Invalid operator, available operators are "and", "or".';
                 throw new \InvalidArgumentException($e);
             }
@@ -91,7 +95,7 @@ trait HasRole
 
             $roleId = $this->parseRoleId($role);
 
-            if ( ! $this->roles->keyBy('id')->has($roleId) ) {
+            if ( !$this->roles->keyBy('id')->has($roleId) ) {
                 $this->roles()->attach($roleId);
 
                 return $role;
@@ -161,7 +165,7 @@ trait HasRole
     protected function isWithAnd($slug, $roles)
     {
         foreach ($slug as $check) {
-            if ( ! in_array($check, $roles) ) {
+            if ( !in_array($check, $roles) ) {
                 return false;
             }
         }
@@ -200,7 +204,7 @@ trait HasRole
             $key = is_numeric($role) ? 'id' : 'slug';
             $alias = (new $model)->where($key, $role)->first();
 
-            if ( ! is_object($alias) || ! $alias->exists ) {
+            if ( !is_object($alias) || !$alias->exists ) {
                 throw new \InvalidArgumentException('Specified role ' . $key . ' does not exists.');
             }
 
@@ -232,14 +236,14 @@ trait HasRole
     public function __call($method, $arguments = [])
     {
         // Handle isRoleSlug() methods
-        if ( starts_with($method, 'is') and $method !== 'is' and ! starts_with($method, 'isWith') ) {
+        if ( starts_with($method, 'is') and $method !== 'is' and !starts_with($method, 'isWith') ) {
             $role = substr($method, 2);
 
             return $this->is($role);
         }
 
         // Handle canDoSomething() methods
-        if ( starts_with($method, 'can') and $method !== 'can' and ! starts_with($method, 'canWith') ) {
+        if ( starts_with($method, 'can') and $method !== 'can' and !starts_with($method, 'canWith') ) {
             $permission = substr($method, 3);
             $permission = snake_case($permission, '.');
 
