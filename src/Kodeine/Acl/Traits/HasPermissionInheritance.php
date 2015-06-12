@@ -45,10 +45,9 @@ trait HasPermissionInheritance
 
             // process inherit_id recursively
             $inherited = $this->getRecursiveInherit($row->inherit_id, $row->slug);
-            $merge = $permissions
+            $merge = (array) $permissions
                 ->where('name', $row->name)
-                ->lists('slug', 'name')
-                ->toArray();
+                ->lists('slug', 'name');
 
             // replace and merge permissions
             $rights = array_replace_recursive($rights, $inherited, $merge);
