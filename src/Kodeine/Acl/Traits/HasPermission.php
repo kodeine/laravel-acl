@@ -1,6 +1,7 @@
 <?php namespace Kodeine\Acl\Traits;
 
 use Kodeine\Acl\Helper\Helper;
+use Illuminate\Support\Collection;
 
 trait HasPermission
 {
@@ -44,7 +45,7 @@ trait HasPermission
             foreach ($role->getPermissions() as $slug => $array) {
                 if ( array_key_exists($slug, $permissions) ) {
                     foreach ($array as $clearance => $value) {
-                        ! $value ?: $permissions[$slug][$clearance] = true;
+                        !$value ?: $permissions[$slug][$clearance] = true;
                     }
                 } else {
                     $permissions = array_merge($permissions, [$slug => $array]);
@@ -79,16 +80,20 @@ trait HasPermission
     /**
      * Assigns the given permission to the user.
      *
-     * @param  object|array|string|int $permission
+     * @param  object|array|string|int|Collection $permission
      * @return bool
      */
     public function assignPermission($permission)
     {
+        if ( $permission instanceof Collection ) {
+            $permission = $permission->lists('name');
+        }
+
         return $this->mapArray($permission, function ($permission) {
 
             $permissionId = $this->parsePermissionId($permission);
 
-            if ( ! $this->permissions->keyBy('id')->has($permissionId) ) {
+            if ( !$this->permissions->keyBy('id')->has($permissionId) ) {
                 $this->permissions()->attach($permissionId);
 
                 return $permission;
@@ -101,11 +106,15 @@ trait HasPermission
     /**
      * Revokes the given permission from the user.
      *
-     * @param  object|array|string|int $permission
+     * @param  object|array|string|int|Collection $permission
      * @return bool
      */
     public function revokePermission($permission)
     {
+        if ( $permission instanceof Collection ) {
+            $permission = $permission->lists('name');
+        }
+
         return $this->mapArray($permission, function ($permission) {
 
             $permissionId = $this->parsePermissionId($permission);
@@ -117,11 +126,15 @@ trait HasPermission
     /**
      * Syncs the given permission(s) with the user.
      *
-     * @param  object|array|string|int $permissions
+     * @param  object|array|string|int|Collection $permissions
      * @return bool
      */
     public function syncPermissions($permissions)
     {
+        if ( $permissions instanceof Collection ) {
+            $permissions = $permissions->lists('name');
+        }
+
         $sync = [];
         $this->mapArray($permissions, function ($permission) use (&$sync) {
 
@@ -165,7 +178,7 @@ trait HasPermission
             $key = is_numeric($permission) ? 'id' : 'name';
             $alias = (new $model)->where($key, $permission)->first();
 
-            if ( ! is_object($alias) || ! $alias->exists ) {
+            if ( !is_object($alias) || !$alias->exists ) {
                 throw new \InvalidArgumentException('Specified permission ' . $key . ' does not exists.');
             }
 
