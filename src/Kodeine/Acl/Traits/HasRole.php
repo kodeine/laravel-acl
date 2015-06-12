@@ -33,9 +33,8 @@ trait HasRole
     {
         return is_null($this->roles)
             ? []
-            : $this->roles
-                ->lists('slug')
-                ->toArray();
+            : (array) $this->roles
+                ->lists('slug');
     }
 
     /**
