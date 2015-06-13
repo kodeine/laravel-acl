@@ -79,7 +79,7 @@ trait HasPermission
     /**
      * Assigns the given permission to the user.
      *
-     * @param  object|array|string|int $permission
+     * @param  collection|object|array|string|int $permission
      * @return bool
      */
     public function assignPermission($permission)
@@ -101,7 +101,7 @@ trait HasPermission
     /**
      * Revokes the given permission from the user.
      *
-     * @param  object|array|string|int $permission
+     * @param  collection|object|array|string|int $permission
      * @return bool
      */
     public function revokePermission($permission)
@@ -117,7 +117,7 @@ trait HasPermission
     /**
      * Syncs the given permission(s) with the user.
      *
-     * @param  object|array|string|int $permissions
+     * @param  collection|object|array|string|int $permissions
      * @return bool
      */
     public function syncPermissions($permissions)

@@ -100,6 +100,13 @@ trait Helper
     {
         $item = $this->hasDelimiterToArray($item);
 
+        // item is a collection.
+        if ($item instanceof Collection) {
+            $item = $this->collectionAsArray(
+                $item->lists('name')
+            );
+        }
+
         // multiple items
         if ( is_array($item) ) {
             // is an array of One Role/Permission
