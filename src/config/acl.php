@@ -12,12 +12,12 @@ return [
     'permission' => 'Kodeine\Acl\Models\Eloquent\Permission',
 
     /**
-     * NTFS right, the more permissive wins
+     * Most Permissive Wins right
      * If you have multiple permission aliases assigned, each alias
      * has a common permission, view.house => false, but one alias
-     * has it set to true. If ntfs right is enabled, true value
-     * wins the race, ie the more permissive wins.
+     * has it set to true. If this right is enabled, true value
+     * wins the race, ie the most permissive wins.
      */
 
-    'ntfs'       => true,
+    'most_permissive_wins'       => false,
 ];
