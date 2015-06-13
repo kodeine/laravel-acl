@@ -85,7 +85,7 @@ trait HasRole
     /**
      * Assigns the given role to the user.
      *
-     * @param  object|array|string|int $role
+     * @param  collection|object|array|string|int $role
      * @return bool
      */
     public function assignRole($role)
@@ -107,7 +107,7 @@ trait HasRole
     /**
      * Revokes the given role from the user.
      *
-     * @param  object|array|string|int $role
+     * @param  collection|object|array|string|int $role
      * @return bool
      */
     public function revokeRole($role)
@@ -123,7 +123,7 @@ trait HasRole
     /**
      * Syncs the given role(s) with the user.
      *
-     * @param  object|array|string|int $roles
+     * @param  collection|object|array|string|int $roles
      * @return bool
      */
     public function syncRoles($roles)
