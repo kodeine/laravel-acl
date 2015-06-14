@@ -27,11 +27,14 @@ trait HasRole
     /**
      * Get all roles.
      *
-     * @return array|null
+     * @return array
      */
     public function getRoles()
     {
-        return is_null($this->roles) ? [] : $this->roles->lists('slug');
+        $slugs = $this->roles->lists('slug');
+        return is_null($this->roles)
+            ? []
+            : $this->collectionAsArray($slugs);
     }
 
     /**
