@@ -114,8 +114,8 @@ class HasPermission
         // UserController@index but only
         // UserController we use crud restful.
         $methods = is_array($methods) ? $methods :
-            in_array($caller, $resources) ?
-                $this->crud['resource'] : $this->crud['restful'];
+            (in_array($caller, $resources) ?
+                $this->crud['resource'] : $this->crud['restful']);
 
         // determine crud method we're trying to protect
         $crud = array_where($methods, function ($k, $v) use ($called) {
