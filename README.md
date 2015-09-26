@@ -10,7 +10,6 @@
 Laravel ACL adds role based permissions to built in Auth System of Laravel 5. ACL middleware protects routes and even crud controller methods.
 
 # Table of Contents
-* [Team Members](#team-members)
 * [Requirements](#requirements)
 * [Getting Started](#getting-started)
 * [Documentation](#documentation)
@@ -18,10 +17,6 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 * [Change Logs](#change-logs)
 * [Contribution Guidelines](#contribution-guidelines)
 
-# <a name="team-members"></a>Team Members
-
-* Ahsen M. ([Kodeine](https://github.com/kodeine))
-* Romain Lanz ([RomainLanz](https://github.com/romainlanz))
 
 # <a name="requirements"></a>Requirements
 
