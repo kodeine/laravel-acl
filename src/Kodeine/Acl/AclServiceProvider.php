@@ -61,21 +61,17 @@ class AclServiceProvider extends ServiceProvider
      */
     protected function registerBladeExtensions()
     {
-        // role
-        Blade::directive('role', function($expression) {
+        $blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
+        $blade->directive('role', function ($expression) {
             return "<?php if (Auth::check() && Auth::user()->is{$expression}): ?>";
         });
-
-        Blade::directive('endrole', function() {
+        $blade->directive('endrole', function () {
             return "<?php endif; ?>";
         });
-
-        // permission
-        Blade::directive('access', function($expression) {
+        $blade->directive('permission', function ($expression) {
             return "<?php if (Auth::check() && Auth::user()->can{$expression}): ?>";
         });
-
-        Blade::directive('endaccess', function() {
+        $blade->directive('endpermission', function () {
             return "<?php endif; ?>";
         });
     }
