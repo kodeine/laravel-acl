@@ -71,11 +71,11 @@ class AclServiceProvider extends ServiceProvider
         });
 
         // permission
-        Blade::directive('permission', function($expression) {
+        Blade::directive('access', function($expression) {
             return "<?php if (Auth::check() && Auth::user()->can{$expression}): ?>";
         });
 
-        Blade::directive('endpermission', function() {
+        Blade::directive('endaccess', function() {
             return "<?php endif; ?>";
         });
     }
