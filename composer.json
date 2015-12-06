@@ -1,7 +1,16 @@
 {
     "name": "kodeine/laravel-acl",
     "description": "Light-weight role-based permissions for Laravel 5 built in Auth system.",
-    "keywords": ["laravel", "permissions", "roles", "auth", "acl" , "security", "eloquent", "kodeine"],
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "permissions",
+        "roles",
+        "auth",
+        "acl",
+        "security",
+        "eloquent"
+    ],
     "authors": [
         {
             "name": "Ahsen M.",
@@ -10,17 +19,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "4.2.x|~5.0",
-        "illuminate/database": "4.2.x|~5.0"
+        "php": ">=5.5.9",
+        "illuminate/support": "~5.0"
     },
     "autoload": {
-        "classmap": [
-        ],
-        "psr-0": {
-            "Kodeine\\Acl\\": "src/"
+        "psr-4": {
+            "Kodeine\\Acl\\": "src/Kodeine/Acl"
         }
-    },
-    "minimum-stability": "stable",
-    "license": "MIT"
+    }
 }

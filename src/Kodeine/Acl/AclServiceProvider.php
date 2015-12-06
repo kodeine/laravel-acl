@@ -1,5 +1,6 @@
 <?php namespace Kodeine\Acl;
 
+use Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AclServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class AclServiceProvider extends ServiceProvider
     {
         $this->publishConfig();
         $this->publishMigration();
+        $this->registerBladeExtensions();
     }
 
     /**
@@ -29,7 +31,9 @@ class AclServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/acl.php', 'acl'
+        );
     }
 
     /**
@@ -50,5 +54,25 @@ class AclServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../migrations/' => base_path('/database/migrations'),
         ], 'migrations');
+    }
+
+    /**
+     * Register Blade Template Extensions.
+     */
+    protected function registerBladeExtensions()
+    {
+        $blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
+        $blade->directive('role', function ($expression) {
+            return "<?php if (Auth::check() && Auth::user()->is{$expression}): ?>";
+        });
+        $blade->directive('endrole', function () {
+            return "<?php endif; ?>";
+        });
+        $blade->directive('permission', function ($expression) {
+            return "<?php if (Auth::check() && Auth::user()->can{$expression}): ?>";
+        });
+        $blade->directive('endpermission', function () {
+            return "<?php endif; ?>";
+        });
     }
 }

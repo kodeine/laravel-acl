@@ -22,7 +22,7 @@ trait HasPermissionInheritance
         // then more permissive wins
         $tmp = [];
         $letNtfs = function ($alias, $slug) use (&$tmp) {
-            if ( config('acl.ntfs', true) ) {
+            if ( config('acl.most_permissive_wins', false) ) {
                 $ntfs[$alias] = array_diff($slug, [false]);
                 if ( sizeof($ntfs) > 0 ) {
                     $tmp = array_replace_recursive($tmp, $ntfs);
@@ -81,7 +81,7 @@ trait HasPermissionInheritance
         // then more permissive wins
         $tmp = [];
         $letNtfs = function ($slug) use (&$tmp) {
-            if ( config('acl.ntfs', true) ) {
+            if ( config('acl.most_permissive_wins', false) ) {
                 $ntfs = array_diff($slug, [false]);
                 if ( sizeof($ntfs) > 0 ) {
                     $tmp = array_replace($tmp, $ntfs);
