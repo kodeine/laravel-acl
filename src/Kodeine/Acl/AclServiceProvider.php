@@ -21,7 +21,13 @@ class AclServiceProvider extends ServiceProvider
     {
         $this->publishConfig();
         $this->publishMigration();
-        $this->registerBladeExtensions();
+
+        $laravel = app();
+        if ( starts_with($laravel::VERSION, '5.0') ) {
+            $this->registerBlade5_0();
+        } else {
+            $this->registerBlade5_1();
+        }
     }
 
     /**
@@ -57,22 +63,53 @@ class AclServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register Blade Template Extensions.
+     * Register Blade Template Extensions for >= L5.1
      */
-    protected function registerBladeExtensions()
+    protected function registerBlade5_1()
     {
-        $blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
-        $blade->directive('role', function ($expression) {
+        // role
+        Blade::directive('role', function ($expression) {
             return "<?php if (Auth::check() && Auth::user()->is{$expression}): ?>";
         });
-        $blade->directive('endrole', function () {
+
+        Blade::directive('endrole', function () {
             return "<?php endif; ?>";
         });
-        $blade->directive('permission', function ($expression) {
+
+        // permission
+        Blade::directive('permission', function ($expression) {
             return "<?php if (Auth::check() && Auth::user()->can{$expression}): ?>";
         });
-        $blade->directive('endpermission', function () {
+
+        Blade::directive('endpermission', function () {
             return "<?php endif; ?>";
+        });
+    }
+
+    /**
+     * Register Blade Template Extensions for <= L5.0
+     */
+    protected function registerBlade5_0()
+    {
+        $blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
+        $blade->extend(function ($view, $compiler) {
+            $pattern = $compiler->createMatcher('role');
+            return preg_replace($pattern, '<?php if (Auth::check() && Auth::user()->is$2): ?> ', $view);
+        });
+
+        $blade->extend(function ($view, $compiler) {
+            $pattern = $compiler->createPlainMatcher('endrole');
+            return preg_replace($pattern, '<?php endif; ?>', $view);
+        });
+
+        $blade->extend(function ($view, $compiler) {
+            $pattern = $compiler->createMatcher('permission');
+            return preg_replace($pattern, '<?php if (Auth::check() && Auth::user()->can$2): ?> ', $view);
+        });
+
+        $blade->extend(function ($view, $compiler) {
+            $pattern = $compiler->createPlainMatcher('endpermission');
+            return preg_replace($pattern, '<?php endif; ?>', $view);
         });
     }
 }
