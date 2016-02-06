@@ -79,7 +79,7 @@ trait HasRole
         }
 
         // single slug
-        return in_array($slug, $roles);
+        return $roles->contains($slug)
     }
 
     /**
@@ -164,7 +164,7 @@ trait HasRole
     protected function isWithAnd($slug, $roles)
     {
         foreach ($slug as $check) {
-            if ( ! in_array($check, $roles) ) {
+            if ( ! $roles->contains($check) ) {
                 return false;
             }
         }
@@ -180,7 +180,7 @@ trait HasRole
     protected function isWithOr($slug, $roles)
     {
         foreach ($slug as $check) {
-            if ( in_array($check, $roles) ) {
+            if ( $roles->contains($check) ) {
                 return true;
             }
         }
