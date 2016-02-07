@@ -84,7 +84,7 @@ trait HasRole
         }
 
         // single slug
-        return in_array($slug, $roles)
+        return in_array($slug, $roles);
     }
 
     /**
