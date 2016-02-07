@@ -64,6 +64,11 @@ trait HasRole
 
         $roles = $this->getRoles();
         $slug = $this->hasDelimiterToArray($slug);
+        
+        // create array for the use of php array functions.
+        if ( ! is_array($roles) ) {
+            $roles = $roles->toArray();
+        }
 
         // array of slugs
         if ( is_array($slug) ) {
@@ -79,7 +84,7 @@ trait HasRole
         }
 
         // single slug
-        return $roles->contains($slug)
+        return in_array($slug, $roles)
     }
 
     /**
@@ -164,7 +169,7 @@ trait HasRole
     protected function isWithAnd($slug, $roles)
     {
         foreach ($slug as $check) {
-            if ( ! $roles->contains($check) ) {
+            if ( ! in_array($check, $roles) ) {
                 return false;
             }
         }
@@ -180,7 +185,7 @@ trait HasRole
     protected function isWithOr($slug, $roles)
     {
         foreach ($slug as $check) {
-            if ( $roles->contains($check) ) {
+            if ( in_array($check, $roles) ) {
                 return true;
             }
         }
