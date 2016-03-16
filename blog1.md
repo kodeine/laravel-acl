@@ -24,9 +24,9 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 
 # <a name="getting-started"></a>Getting Started
 
-1. Run `composer require kodeine/laravel-acl`
+1) Run `composer require kodeine/laravel-acl`
 
-2. Add the package to your application service providers in `config/app.php`.
+2) Add the package to your application service providers in `config/app.php`.
 
 ```php
 'providers' => [
@@ -41,7 +41,7 @@ Kodeine\Acl\AclServiceProvider::class,
 ![Image of Step 2]
 (https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Step%202.png?raw=true)
 
-3. Clear the config cache, Publish the package migrations to your application, and run migrations.
+3) Clear the config cache, Publish the package migrations to your application, and run migrations.
 
 ```
 $ php artisan config:clear
@@ -52,7 +52,7 @@ $ php artisan migrate
 > **Use your own models.**
 > Once you publish, it publishes the configuration file where you can define your own models which should extend to Acl models.
 
-4. Add the middleware to your `app/Http/Kernel.php`.
+4) Add the middleware to your `app/Http/Kernel.php`.
 
 ```php
 protected $routeMiddleware = [
@@ -66,7 +66,7 @@ protected $routeMiddleware = [
 ![Image of Step 4]
 (https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Step%204.png?raw=true)
 
-5. Add the HasRole trait, Authenticatable contract, and CanResetPassword contract to your `User` model.
+5) Add the HasRole trait, Authenticatable contract, and CanResetPassword contract to your `User` model.
 
 ```php
 use Kodeine\Acl\Traits\HasRole;
