@@ -38,6 +38,9 @@ Kodeine\Acl\AclServiceProvider::class,
 ],
 ```
 
+![Image of Step 2]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Step%202.png?raw=true)
+
 3. Clear the config cache, Publish the package migrations to your application, and run migrations.
 
 ```
@@ -59,6 +62,9 @@ protected $routeMiddleware = [
 
 ];
 ```
+
+![Image of Step 4]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Step%204.png?raw=true)
 
 5. Add the HasRole trait, Authenticatable contract, and CanResetPassword contract to your `User` model.
 
@@ -180,6 +186,9 @@ Simply wrap that part of the html that you want to be under a  role permission w
 
 ### MyWork Button is visible
 
+![Image of MyWork Visible]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Before%20MyWork%20Visible.png?raw=true)
+
 ### Wrapping MyWork button in a role
 NOTE: you can add multiple roles by piping slugs together within the single-quotes e.g. @role('admin|...|...|')...@endrole
 ```html
@@ -188,13 +197,24 @@ NOTE: you can add multiple roles by piping slugs together within the single-quot
 
 ### Result, MyWork button is gone
 
+![Image of MyWork Gone]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Result%20MyWork%20Gone%20Role.png?raw=true)
+
 ### After logging in as admin
+
+![Image of Logged in as Admin]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Logged%20in%20as%20admin.png?raw=true)
+
+
 
 ## Permission
 
 Simply wrap that part of the html that you want to be under a permission with a permission blade directive
 
 ### MyWork Button is visible
+
+![Image of MyWork Visible]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Before%20MyWork%20Visible.png?raw=true)
 
 ### Wrapping MyWork button in a permission
 NOTE: you can add multiple permissions by piping slugs together within the single-quotes e.g. @permission('view.mywork|update.mywork|...')...@endpermission
@@ -204,7 +224,14 @@ NOTE: you can add multiple permissions by piping slugs together within the singl
 
 ### Result, MyWork button is gone
 
+![Image of MyWork Gone]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Result%20MyWork%20Gone%20Role.png?raw=true)
+
 ### After logging in as admin, Which has the view.mywork permission
+
+![Image of Logged in as Admin]
+(https://github.com/jonesj38/laravel-acl/blob/1.0/Tutorial%20Images/Logged%20in%20as%20admin.png?raw=true)
+
 
 # <a name="documentation"></a>Documentation
 
