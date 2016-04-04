@@ -1,17 +1,17 @@
-# Blog Post 1 - Kodeine/Laravel-ACL - by jonesj38
+# Tutorial for Kodeine/Laravel-ACL
 
 [![Laravel](https://img.shields.io/badge/Laravel-~5.0-orange.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-kodeine/laravel--acl-blue.svg?style=flat-square)](https://github.com/kodeine/laravel-acl/)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
 
 Laravel ACL adds role based permissions to built in Auth System of Laravel 5. ACL middleware protects routes and crud controller methods.
-# [Artifact 1]
-# Installation Instructions for Kodeine/Laravel-ACL - by jonesj38
+
+# Installation Instructions for Kodeine/Laravel-ACL
 
 # Table of Contents
 * [Requirements](#requirements)
 * [Getting Started](#getting-started)
-* [Adding Roles](#adding-roles) -- note: Artifact 2 starts here
+* [Adding Roles](#adding-roles)
 * [Adding Permissions](#adding-permissions)
 * [Setting Up Blade Directives](#setting-up-blade-directives)
 * [Usage Examples for Blade Directives](#usage-examples-for-blade-directives)
@@ -80,8 +80,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     ...
 }
 ```
-
-# [Artifact 2]
 
 # <a name="adding-roles"></a>Adding Roles
 ## Using Seeder
