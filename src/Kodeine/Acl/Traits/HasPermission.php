@@ -34,7 +34,7 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = \Cache::remember('acl.getPermissionsById_'.\Auth::user()['id'], 60,
+        $permissions = \Cache::remember('acl.getPermissionsById_'.\Auth::user()['id'], config('acl.cacheSeconds'),
             function () {
                 return $this->getPermissionsInherited();
             }

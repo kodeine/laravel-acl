@@ -38,7 +38,7 @@ class Role extends Model
      */
     public function getPermissions()
     {
-        return \Cache::remember('acl.getPermissionsInheritedById_'.\Auth::user()['id'], 60,
+        return \Cache::remember('acl.getPermissionsInheritedById_'.\Auth::user()['id'], config('acl.cacheSeconds'),
             function () {
                 return $this->getPermissionsInherited();
             }
