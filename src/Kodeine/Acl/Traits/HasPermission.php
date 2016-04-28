@@ -34,7 +34,11 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = $this->getPermissionsInherited();
+        $permissions = \Cache::remember('permissionById_'.\Auth::user()['id'], 60,
+            function () {
+                return $this->getPermissionsInherited();
+            }
+        );
 
         // permissions based on role.
         // more permissive permission wins
