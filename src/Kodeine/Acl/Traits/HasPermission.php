@@ -34,7 +34,7 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = \Cache::remember('permissionById2_'.\Auth::user()['id'], 60,
+        $permissions = \Cache::remember('acl.getPermissionsById_'.\Auth::user()['id'], 60,
             function () {
                 return $this->getPermissionsInherited();
             }
@@ -70,7 +70,11 @@ trait HasPermission
     {
         // user permissions including
         // all of user role permissions
-        $merge = $this->getPermissions();
+        $merge =  \Cache::remember('acl.getMergeById_'.\Auth::user()['id'], 60,
+            function () {
+                return $this->getPermissions();
+            }
+        );
 
         // lets call our base can() method
         // from role class. $merge already

@@ -31,8 +31,14 @@ trait HasRole
      */
     public function getRoles()
     {
-        $slugs = $this->roles->lists('slug');
-        return is_null($this->roles)
+        $this_roles = \Cache::remember('acl.getRolesById_'.\Auth::user()['id'], 60,
+            function () {
+                return $this->roles;
+            }
+        );
+
+        $slugs = $this_roles->lists('slug');
+        return is_null($this_roles)
             ? []
             : $this->collectionAsArray($slugs);
     }
