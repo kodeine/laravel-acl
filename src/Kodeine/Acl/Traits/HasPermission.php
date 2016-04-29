@@ -70,7 +70,7 @@ trait HasPermission
     {
         // user permissions including
         // all of user role permissions
-        $merge =  \Cache::remember('acl.getMergeById_'.\Auth::user()['id'], 60,
+        $merge =  \Cache::remember('acl.getMergeById_'.\Auth::user()['id'], config('acl.cacheSeconds'),
             function () {
                 return $this->getPermissions();
             }

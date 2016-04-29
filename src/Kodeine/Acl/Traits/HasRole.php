@@ -31,7 +31,7 @@ trait HasRole
      */
     public function getRoles()
     {
-        $this_roles = \Cache::remember('acl.getRolesById_'.\Auth::user()['id'], 60,
+        $this_roles = \Cache::remember('acl.getRolesById_'.\Auth::user()['id'], config('acl.cacheSeconds'),
             function () {
                 return $this->roles;
             }
