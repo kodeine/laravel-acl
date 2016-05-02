@@ -10,7 +10,6 @@ return [
 
     'role'       => 'Kodeine\Acl\Models\Eloquent\Role',
     'permission' => 'Kodeine\Acl\Models\Eloquent\Permission',
-    'user' => 'Kodeine\Acl\Models\Eloquent\User',
 
     /**
      * Most Permissive Wins right

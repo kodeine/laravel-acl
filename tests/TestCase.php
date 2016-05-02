@@ -54,7 +54,7 @@ abstract class TestCase extends BaseTestCase
             'database' => ':memory:',
             'prefix'   => '',
         ]);
-        $config->set('auth.model', Kodeine\Acl\Models\Eloquent\User::class);
+        $config->set('auth.model', \Kodeine\Acl\Models\Eloquent\User::class);
     }
 
     /* ------------------------------------------------------------------------------------------------
