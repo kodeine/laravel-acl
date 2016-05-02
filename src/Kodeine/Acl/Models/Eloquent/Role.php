@@ -28,7 +28,11 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(config('auth.model'))->withTimestamps();
+        $model = config('acl.user');
+//         echo $model;exit;
+//         $model = config('auth.model');
+//         $model = 'Kodeine\Acl\Models\Eloquent\User';
+        return $this->belongsToMany($model)->withTimestamps();
     }
 
     /**
