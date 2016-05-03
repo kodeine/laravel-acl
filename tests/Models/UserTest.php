@@ -107,4 +107,49 @@ class UserTest extends ModelsTest
         $this->assertEquals($user->getRoles(), [str_slug('Admin role', config('laravel-auth.slug-separator'))]);
         $this->assertEquals($user->getPermissions(), ['post' => $permissionAttributes['slug']]);
     }
+
+    /** @test */
+    public function cacheTest()
+    {
+        $objRole = new Role();
+        $roleAttributes = [
+            'name'        => 'Admin',
+            'slug'        => str_slug('Admin role', config('laravel-auth.slug-separator')),
+            'description' => 'Admin role descriptions.',
+        ];
+        $role = $objRole->create($roleAttributes);
+        
+        $objPermission = new Permission();
+        $permissionAttributes = [
+            'name'        => 'cache',
+            'slug'        => [
+                'create'     => true,
+                'view'       => true,
+                'update'     => true,
+                'delete'     => true,
+            ],
+            'description' => 'manage post permissions'
+        ];
+        $permission = $objPermission->create($permissionAttributes);
+        
+        $role->syncPermissions($permission);
+        
+        $user = new User();
+        $user->username = 'Cache test';
+        $user->email = 'cache@test.com';
+        $user->password = 'CacheTest';
+        $user->save();
+        $user->syncRoles($role);
+        
+        \DB::connection()->enableQueryLog();
+        $user->getPermissions();
+        $queriesNoCache = count(\DB::getQueryLog());
+        \DB::flushQueryLog();
+        
+        \DB::connection()->enableQueryLog();
+        $user->getPermissions();
+        $queriesCache = count(\DB::getQueryLog());
+        
+        $this->assertGreaterThan($queriesCache, $queriesNoCache);
+    }
 }
