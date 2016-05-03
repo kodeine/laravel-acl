@@ -5,7 +5,6 @@ use Kodeine\Acl\Models\Eloquent\Role;
 use Kodeine\Acl\Models\Eloquent\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-
 class RoleTest extends ModelsTest
 {
     /* ------------------------------------------------------------------------------------------------
@@ -38,7 +37,7 @@ class RoleTest extends ModelsTest
      | ------------------------------------------------------------------------------------------------
      */
     /** @test */
-    public function it_can_be_instantiated()
+    public function itCanBeInstantiated()
     {
         $expectations = [
             \Illuminate\Database\Eloquent\Model::class,
@@ -51,7 +50,7 @@ class RoleTest extends ModelsTest
     }
 
     /** @test */
-    public function it_has_relationships()
+    public function itHasRelationships()
     {
         $usersRelationship       = $this->roleModel->users();
         $permissionsRelationship = $this->roleModel->permissions();
@@ -66,12 +65,12 @@ class RoleTest extends ModelsTest
         $user       = $usersRelationship->getRelated();
         $permission = $permissionsRelationship->getRelated();
     
-        $this->assertInstanceOf(User::class,       $user);
+        $this->assertInstanceOf(User::class, $user);
         $this->assertInstanceOf(Permission::class, $permission);
     }
     
     /** @test */
-    public function it_can_create()
+    public function itCanCreate()
     {
         $attributes = [
             'name'        => 'Custom role',
@@ -81,15 +80,15 @@ class RoleTest extends ModelsTest
     
         $role = $this->createRole($attributes);
     
-        $this->assertEquals($attributes['name'],        $role->name);
-        $this->assertEquals($attributes['slug'],        $role->slug);
+        $this->assertEquals($attributes['name'], $role->name);
+        $this->assertEquals($attributes['slug'], $role->slug);
         $this->assertEquals($attributes['description'], $role->description);
     
         $this->seeInDatabase('roles', $attributes);
     }
     
     /** @test */
-    public function it_can_update()
+    public function itCanUpdate()
     {
         $attributes = $this->getAdminRoleAttributes();
     
@@ -112,7 +111,7 @@ class RoleTest extends ModelsTest
     }
     
     /** @test */
-    public function it_can_delete()
+    public function itCanDelete()
     {
         $role = $this->createRole();
     

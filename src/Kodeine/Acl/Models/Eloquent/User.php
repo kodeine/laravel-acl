@@ -25,5 +25,4 @@ class User extends Model
      * @var string
      */
     protected $table = 'users';
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Illuminate\Database\Migrations;
+
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -32,5 +34,4 @@ class CreatePermissionRoleTable extends Migration
     {
         Schema::drop('permission_role');
     }
-
 }

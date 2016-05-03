@@ -16,3 +16,4 @@ before_script:
 
 script:
   - vendor/bin/phpunit --debug
+  - vendor/bin/phpcs --standard=psr2 src/ tests/

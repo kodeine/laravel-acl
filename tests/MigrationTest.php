@@ -9,7 +9,7 @@ class MigrationsTest extends TestCase
      | ------------------------------------------------------------------------------------------------
      */
     /** @test */
-    public function it_can_publish_migrations()
+    public function itCanPublishMigrations()
     {
         /** @var \Illuminate\Filesystem\Filesystem $filesystem */
         $filesystem = $this->app['files'];
@@ -29,7 +29,7 @@ class MigrationsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_migrate()
+    public function itCanMigrate()
     {
         $this->migrate();
 

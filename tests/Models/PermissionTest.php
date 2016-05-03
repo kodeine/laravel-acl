@@ -38,7 +38,7 @@ class PermissionTest extends ModelsTest
      | ------------------------------------------------------------------------------------------------
      */
     /** @test */
-    public function it_can_be_instantiated()
+    public function itCanBeInstantiated()
     {
         $expectations = [
             \Illuminate\Database\Eloquent\Model::class,
@@ -51,7 +51,7 @@ class PermissionTest extends ModelsTest
     }
 
     /** @test */
-    public function it_has_relationships()
+    public function itHasRelationships()
     {
         $rolesRelationship = $this->permissionModel->roles();
 
@@ -60,11 +60,11 @@ class PermissionTest extends ModelsTest
         $this->assertInstanceOf(
             \Kodeine\Acl\Models\Eloquent\Role::class,
             $rolesRelationship->getRelated()
-            );
+        );
     }
 
     /** @test */
-    public function it_can_create()
+    public function itCanCreate()
     {
         $attributes = [
             'name'        => 'Create users',
@@ -85,7 +85,7 @@ class PermissionTest extends ModelsTest
     }
 
     /** @test */
-    public function it_can_update()
+    public function itCanUpdate()
     {
         $attributes = [
             'name'        => 'Create users',
@@ -115,7 +115,7 @@ class PermissionTest extends ModelsTest
     }
 
     /** @test */
-    public function it_can_delete()
+    public function itCanDelete()
     {
         $attributes = [
             'name'        => 'Create users',

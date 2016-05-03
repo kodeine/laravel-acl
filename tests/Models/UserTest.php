@@ -5,7 +5,6 @@ use Kodeine\Acl\Models\Eloquent\Role;
 use Kodeine\Acl\Models\Eloquent\User;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-
 class UserTest extends ModelsTest
 {
     /* ------------------------------------------------------------------------------------------------
@@ -38,7 +37,7 @@ class UserTest extends ModelsTest
      | ------------------------------------------------------------------------------------------------
      */
     /** @test */
-    public function it_can_be_instantiated()
+    public function itCanBeInstantiated()
     {
         $expectations = [
             \Illuminate\Database\Eloquent\Model::class,
@@ -51,7 +50,7 @@ class UserTest extends ModelsTest
     }
 
     /** @test */
-    public function it_can_attach_role()
+    public function itCanAttachRole()
     {
         $objRole = new Role();
         $role = $objRole->create([
@@ -73,7 +72,7 @@ class UserTest extends ModelsTest
     }
 
     /** @test */
-    public function it_can_attach_role_and_permission()
+    public function itCanAttachRoleAndPermission()
     {
         $objRole = new Role();
         $roleAttributes = [
