@@ -63,7 +63,7 @@ trait HasRole
         $operator = is_null($operator) ? $this->parseOperator($slug) : $operator;
 
         $roles = $this->getRoles();
-        $roles = (array) $roles;
+        $roles = $roles instanceof \Illuminate\Contracts\Support\Arrayable ? $roles->toArray() : (array) $roles;
         $slug = $this->hasDelimiterToArray($slug);
 
         // array of slugs
