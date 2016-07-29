@@ -35,7 +35,7 @@ trait HasPermission
     {
         // user permissions overridden from role.
         $permissions = \Cache::remember(
-            'acl.getPermissionsById_'.\Auth::user()['id'],
+            'acl.getPermissionsById_'.$this->id,
             config('acl.cacheMinutes'),
             function () {
                 return $this->getPermissionsInherited();
@@ -73,7 +73,7 @@ trait HasPermission
         // user permissions including
         // all of user role permissions
         $merge =  \Cache::remember(
-            'acl.getMergeById_'.\Auth::user()['id'],
+            'acl.getMergeById_'.$this->id,
             config('acl.cacheMinutes'),
             function () {
                 return $this->getPermissions();

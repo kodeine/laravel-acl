@@ -28,14 +28,10 @@ trait HasRole
      *
      * @return array
      */
-    public function getRoles($idUser = null)
+    public function getRoles()
     {
-        if (empty($idUser)) {
-            $idUser = \Auth::user()['id'];
-        }
-        
         $this_roles = \Cache::remember(
-            'acl.getRolesById_'.$idUser,
+            'acl.getRolesById_'.$this->id,
             config('acl.cacheMinutes'),
             function () {
                 return $this->roles;
