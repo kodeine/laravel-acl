@@ -107,7 +107,6 @@ class RoleTest extends ModelsTest
         $this->dontSeeInDatabase('roles', $attributes);
         $this->seeInDatabase('roles', $updatedAttributes);
         $this->seeInDatabase('roles', $role->toArray());
-    
     }
     
     /** @test */

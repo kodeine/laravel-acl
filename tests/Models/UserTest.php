@@ -68,7 +68,6 @@ class UserTest extends ModelsTest
         $user->syncRoles(str_slug('Admin role', config('laravel-auth.slug-separator')));
         
         $this->assertEquals($user->getRoles(), [str_slug('Admin role', config('laravel-auth.slug-separator'))]);
-        
     }
 
     /** @test */
