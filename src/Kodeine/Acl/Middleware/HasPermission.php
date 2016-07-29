@@ -49,7 +49,7 @@ class HasPermission
             return $next($request);
         }
 
-        if ( $request->isJson() || $request->wantsJson() ) {
+        if ($request->isJson() || $request->wantsJson()) {
             return response()->json([
                 'error' => [
                     'status_code' => 401,
@@ -174,7 +174,7 @@ class HasPermission
      */
     protected function parseAlias()
     {
-        if ( $alias = $this->getAction('protect_alias') ) {
+        if ($alias = $this->getAction('protect_alias')) {
             return $alias;
         }
 
@@ -198,9 +198,9 @@ class HasPermission
         $action = $this->request->route()->getActionName();
 
         // parse index, store, create etc
-        if ( preg_match('/@([^\s].+)$/is', $action, $m) ) {
+        if (preg_match('/@([^\s].+)$/is', $action, $m)) {
             $controller = $m[1];
-            if ( $controller != 'Closure' ) {
+            if ($controller != 'Closure') {
                 return $controller;
             }
         }
@@ -214,14 +214,13 @@ class HasPermission
     protected function crudConfigOverride()
     {
         // Override crud restful from config.
-        if ( ($restful = config('acl.crud.restful')) != null ) {
+        if (($restful = config('acl.crud.restful')) != null) {
             $this->crud['restful'] = $restful;
         }
 
         // Override crud resource from config.
-        if ( ($resource = config('acl.crud.resource')) != null ) {
+        if (($resource = config('acl.crud.resource')) != null) {
             $this->crud['resource'] = $resource;
         }
     }
-
 }

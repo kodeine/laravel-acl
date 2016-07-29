@@ -17,8 +17,8 @@ class CreateRoleUserTable extends Migration
             $table->increments('id');
             $table->integer('role_id')->unsigned()->index();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-            $table->integer('user_id')->unsigned()->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('user_id')->unsigned()->index()->foreign('user_id')
+                    ->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,5 +32,4 @@ class CreateRoleUserTable extends Migration
     {
         Schema::drop('role_user');
     }
-
 }

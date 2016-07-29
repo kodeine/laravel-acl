@@ -23,10 +23,10 @@ class AclServiceProvider extends ServiceProvider
         $this->publishMigration();
 
         $laravel = app();
-        if ( starts_with($laravel::VERSION, '5.0') ) {
-            $this->registerBlade5_0();
+        if (starts_with($laravel::VERSION, '5.0')) {
+            $this->registerBlade50();
         } else {
-            $this->registerBlade5_1();
+            $this->registerBlade51();
         }
     }
 
@@ -38,7 +38,8 @@ class AclServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/acl.php', 'acl'
+            __DIR__ . '/../../config/acl.php',
+            'acl'
         );
     }
 
@@ -65,7 +66,7 @@ class AclServiceProvider extends ServiceProvider
     /**
      * Register Blade Template Extensions for >= L5.1
      */
-    protected function registerBlade5_1()
+    protected function registerBlade51()
     {
         // role
         Blade::directive('role', function ($expression) {
@@ -89,7 +90,7 @@ class AclServiceProvider extends ServiceProvider
     /**
      * Register Blade Template Extensions for <= L5.0
      */
-    protected function registerBlade5_0()
+    protected function registerBlade50()
     {
         $blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
         $blade->extend(function ($view, $compiler) {

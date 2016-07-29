@@ -38,7 +38,9 @@ trait Helper
         $data = [];
         //$permissions = $this->permissions->lists('slug', 'name');
         foreach ($permissions as $alias => $perm) {
-            if ( ! is_array($perm) ) continue;
+            if (! is_array($perm)) {
+                continue;
+            }
             foreach ($perm as $key => $value) {
                 //if ( (bool) $value == false ) continue;
                 $slug = $key . '.' . $alias;
@@ -61,11 +63,11 @@ trait Helper
     {
         // if its an array lets use
         // and operator by default
-        if ( is_array($str) ) {
+        if (is_array($str)) {
             $str = implode(',', $str);
         }
 
-        if ( preg_match('/([,|])(?:\s+)?/', $str, $m) ) {
+        if (preg_match('/([,|])(?:\s+)?/', $str, $m)) {
             return $m[1] == '|' ? 'or' : 'and';
         }
 
@@ -82,7 +84,7 @@ trait Helper
      */
     protected function hasDelimiterToArray($str)
     {
-        if ( is_string($str) && preg_match('/[,|]/is', $str) ) {
+        if (is_string($str) && preg_match('/[,|]/is', $str)) {
             return preg_split('/ ?[,|] ?/', strtolower($str));
         }
 
@@ -108,12 +110,13 @@ trait Helper
         }
 
         // multiple items
-        if ( is_array($item) ) {
+        if (is_array($item)) {
             // is an array of One Role/Permission
             // its an array containing id
             // we dont have to loop through
-            if ( isset($item['id']) )
+            if (isset($item['id'])) {
                 return $closure((int) $item['id']);
+            }
 
             // is an array of slugs
             return array_map($closure, $item);
@@ -122,5 +125,4 @@ trait Helper
         // single item
         return $closure($item);
     }
-
 }

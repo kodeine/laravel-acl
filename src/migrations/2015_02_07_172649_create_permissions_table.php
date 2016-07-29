@@ -33,5 +33,4 @@ class CreatePermissionsTable extends Migration
     {
         Schema::drop('permissions');
     }
-
 }
