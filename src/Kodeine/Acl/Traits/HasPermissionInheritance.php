@@ -45,9 +45,10 @@ trait HasPermissionInheritance
 
             // process inherit_id recursively
             $inherited = $this->getRecursiveInherit($row->inherit_id, $row->slug);
-            $merge = $permissions->where('name', $row->name)->lists('slug', 'name');
+            $merge = $permissions->where('name', $row->name);
+            $merge = method_exists($merge, 'pluck') ? $merge->pluck('slug', 'name') : $merge->lists('slug', 'name');
 
-            // fix for l5.1 and backward compatibility.
+                // fix for l5.1 and backward compatibility.
             // lists() method should return as an array.
             $merge = $this->collectionAsArray($merge);
 
