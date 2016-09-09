@@ -1,7 +1,7 @@
 <?php namespace Kodeine\Acl\Traits;
 
 
-trait HasRole
+trait HasRoleImplementation
 {
     use HasPermission;
 
@@ -251,5 +251,20 @@ trait HasRole
         }
 
         return parent::__call($method, $arguments);
+    }
+}
+
+$laravel = app();
+if (version_compare($laravel::VERSION, '5.3', '<')) {
+    trait HasRole
+    {
+        use HasRoleImplementation {
+            hasRole as is;
+        }
+    }
+} else {
+    trait HasRole
+    {
+        use HasRoleImplementation;
     }
 }
