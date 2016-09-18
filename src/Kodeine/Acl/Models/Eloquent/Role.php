@@ -38,7 +38,13 @@ class Role extends Model
      */
     public function getPermissions()
     {
-        return $this->getPermissionsInherited();
+        return \Cache::remember(
+            'acl.getPermissionsInheritedById_'.$this->id,
+            config('acl.cacheMinutes'),
+            function () {
+                return $this->getPermissionsInherited();
+            }
+        );
     }
 
     /**

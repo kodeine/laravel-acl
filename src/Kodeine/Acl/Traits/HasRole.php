@@ -31,8 +31,16 @@ trait HasRole
      */
     public function getRoles()
     {
-        $slugs = $this->roles->lists('slug','id');
-        return is_null($this->roles)
+        $this_roles = \Cache::remember(
+            'acl.getRolesById_'.$this->id,
+            config('acl.cacheMinutes'),
+            function () {
+                return $this->roles;
+            }
+        );
+
+        $slugs = $this_roles->lists('slug');
+        return is_null($this_roles)
             ? []
             : $this->collectionAsArray($slugs);
     }
@@ -63,7 +71,6 @@ trait HasRole
         $operator = is_null($operator) ? $this->parseOperator($slug) : $operator;
 
         $roles = $this->getRoles();
-        $roles = $roles instanceof \Illuminate\Contracts\Support\Arrayable ? $roles->toArray() : (array) $roles;
         $slug = $this->hasDelimiterToArray($slug);
 
         // array of slugs
