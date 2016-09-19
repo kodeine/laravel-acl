@@ -96,7 +96,7 @@ Here's the TODO list for the next release (**2.0**).
 **September 19, 2016**
 * [x] Added cache support to Roles and Permissions.
 
-**June 14, 2015**
+*June 14, 2015*
 * [x] Added backward compatibility to l5.0 for lists() method.
 * [x] Added [Blade Template Extensions](https://github.com/kodeine/laravel-acl/wiki/Blade-Extensions).
 
