@@ -86,9 +86,9 @@ trait Helper
             return preg_split('/ ?[,|] ?/', strtolower($str));
         }
 
-        return is_array($str) ?
-            array_filter($str, 'strtolower') : is_object($str) ?
-                $str : strtolower($str);
+        return is_array($str) ? 
+            array_filter($str, 'strtolower') : 
+            (is_object($str) ? $str : strtolower($str));
     }
 
     /**

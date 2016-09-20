@@ -31,8 +31,16 @@ trait HasRoleImplementation
      */
     public function getRoles()
     {
-        $slugs = method_exists($this->roles, 'pluck') ? $this->roles->pluck('slug','id'): $this->roles->lists('slug','id');
-        return is_null($this->roles)
+        $this_roles = \Cache::remember(
+            'acl.getRolesById_'.$this->id,
+            config('acl.cacheMinutes'),
+            function () {
+                return $this->roles;
+            }
+        );
+
+        $slugs = method_exists($this_roles, 'pluck') ? $this_roles->pluck('slug','id') : $this_roles->lists('slug','id');
+        return is_null($this_roles)
             ? []
             : $this->collectionAsArray($slugs);
     }

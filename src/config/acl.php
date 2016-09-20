@@ -20,4 +20,11 @@ return [
      */
 
     'most_permissive_wins'       => false,
+
+    /**
+     * Cache Minutes
+     * Set the minutes that roles and permissions will be cached.
+     */
+		
+    'cacheMinutes' => 1,
 ];
