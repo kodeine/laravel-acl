@@ -93,7 +93,10 @@ Here's the TODO list for the next release (**2.0**).
 
 # <a name="change-logs"></a>Change Logs
 
-**September 19, 2016**
+**September 20, 2016**
+* [x] Added support for Laravel 5.3
+
+*September 19, 2016*
 * [x] Added cache support to Roles and Permissions.
 
 *June 14, 2015*
