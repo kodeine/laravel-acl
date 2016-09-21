@@ -89,7 +89,6 @@ Here's the TODO list for the next release (**2.0**).
 * [ ] Refactoring the source code.
 * [ ] Correct all issues.
 * [ ] Adding cache to final user permissions.
-* [ ] Adding tests.
 
 # <a name="change-logs"></a>Change Logs
 
