@@ -4,3 +4,4 @@ composer.lock
 Thumbs.db
 .idea
 Acl_*
+vendor

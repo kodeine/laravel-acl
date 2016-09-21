@@ -9,8 +9,11 @@ php:
 
 matrix:
   allow_failures:
-    - php: 7.0
+    - php: hhvm
 
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source --dev
+
+script:
+  - vendor/bin/phpunit --debug tests/
