@@ -55,6 +55,10 @@ trait HasRoleImplementation
      */
     public function scopeRole($query, $role)
     {
+        if (is_null($role)) {
+            return $query;
+        }
+        
         return $query->whereHas('roles', function ($query) use ($role) {
             $query->where(is_numeric($role) ? 'id' : 'slug', $role);
         });
