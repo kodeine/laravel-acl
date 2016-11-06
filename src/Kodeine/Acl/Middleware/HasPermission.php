@@ -118,7 +118,7 @@ class HasPermission
                 $this->crud['resource'] : $this->crud['restful']);
 
         // determine crud method we're trying to protect
-        $crud = array_where($methods, function ($k, $v) use ($called) {
+        $crud = $this->filterMethods($methods, function ($k, $v) use ($called) {
             return in_array($called, $v);
         });
 
@@ -132,6 +132,18 @@ class HasPermission
         }, array_keys($crud)));
 
         return ! $this->forbiddenRoute() && $request->user()->can($permission);
+    }
+    
+    private function filterMethods($methods, $callback) {
+        $filtered = [];
+
+        foreach ($methods as $key => $value) {
+            if (call_user_func($callback, $key, $value)) {
+                $filtered[$key] = $value;
+            }
+        }
+
+        return $filtered;
     }
 
     /**
