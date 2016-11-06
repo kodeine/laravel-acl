@@ -22,9 +22,19 @@
         "php": ">=5.5.9",
         "illuminate/support": "~5.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "orchestra/testbench": "~3.0",
+        "doctrine/dbal": "^2.5"
+    },
     "autoload": {
         "psr-4": {
             "Kodeine\\Acl\\": "src/Kodeine/Acl"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kodeine\\Acl\\Tests\\": "tests/"
         }
     }
 }
