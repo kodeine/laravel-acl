@@ -50,9 +50,7 @@ trait HasPermission
             foreach ($role->getPermissions() as $slug => $array) {
                 if ( array_key_exists($slug, $permissions) ) {
                     foreach ($array as $clearance => $value) {
-                        if( !array_key_exists( $clearance, $permissions[$slug] ) ) {
-                            ! $value ?: $permissions[$slug][$clearance] = true;
-                        }
+                        ! $value ?: $permissions[$slug][$clearance] = true;
                     }
                 } else {
                     $permissions = array_merge($permissions, [$slug => $array]);
