@@ -33,30 +33,41 @@ trait HasPermission
      */
     public function getPermissions()
     {
-        // user permissions overridden from role.
+
         $permissions = \Cache::remember(
             'acl.getPermissionsById_'.$this->id,
             config('acl.cacheMinutes'),
             function () {
-                return $this->getPermissionsInherited();
+                $permissions = [];
+                // permissions based on role.
+                // more permissive permission wins
+                // if user has multiple roles we keep
+                // true values.
+                foreach ($this->roles as $role) {
+                    foreach ($role->getPermissions() as $slug => $array) {
+                        if ( array_key_exists($slug, $permissions) ) {
+                            foreach ($array as $clearance => $value) {
+                                ! $value ?: $permissions[$slug][$clearance] = true;
+                            }
+                        } else {
+                            $permissions = array_merge($permissions, [$slug => $array]);
+                        }
+                    }
+                }
+
+                // user permissions that override roles ones.
+                foreach ($this->getPermissionsInherited() as $slug => $array) {
+                    if ( array_key_exists($slug, $permissions) ) {
+                        foreach ($array as $clearance => $value) {
+                            $permissions[$slug][$clearance] = $value;
+                        }
+                    } else {
+                        $permissions = array_merge($permissions, [$slug => $array]);
+                    }
+                }
+                return $permissions;
             }
         );
-
-        // permissions based on role.
-        // more permissive permission wins
-        // if user has multiple roles we keep
-        // true values.
-        foreach ($this->roles as $role) {
-            foreach ($role->getPermissions() as $slug => $array) {
-                if ( array_key_exists($slug, $permissions) ) {
-                    foreach ($array as $clearance => $value) {
-                        ! $value ?: $permissions[$slug][$clearance] = true;
-                    }
-                } else {
-                    $permissions = array_merge($permissions, [$slug => $array]);
-                }
-            }
-        }
 
         return $permissions;
     }
@@ -96,6 +107,8 @@ trait HasPermission
      */
     public function assignPermission($permission)
     {
+        $this->deletePermissionCache();
+
         return $this->mapArray($permission, function ($permission) {
 
             $permissionId = $this->parsePermissionId($permission);
@@ -118,6 +131,8 @@ trait HasPermission
      */
     public function revokePermission($permission)
     {
+        $this->deletePermissionCache();
+
         return $this->mapArray($permission, function ($permission) {
 
             $permissionId = $this->parsePermissionId($permission);
@@ -141,7 +156,7 @@ trait HasPermission
 
             return $sync;
         });
-
+        $this->deletePermissionCache();
         return $this->permissions()->sync($sync);
     }
 
@@ -152,6 +167,7 @@ trait HasPermission
      */
     public function revokeAllPermissions()
     {
+        $this->deletePermissionCache();
         return $this->permissions()->detach();
     }
 
@@ -162,6 +178,17 @@ trait HasPermission
     |
     */
 
+
+    /**
+     * Delete cache for this traits.
+     *
+     * @return null
+     */
+    protected function deletePermissionCache()
+    {
+        \Cache::forget('acl.getPermissionsById_'.$this->id);
+        \Cache::forget('acl.getMergeById_'.$this->id);
+    }
 
     /**
      * Parses permission id from object or array.

@@ -58,7 +58,7 @@ trait HasRoleImplementation
         if (is_null($role)) {
             return $query;
         }
-        
+
         return $query->whereHas('roles', function ($query) use ($role) {
             $query->where(is_numeric($role) ? 'id' : 'slug', $role);
         });
@@ -103,11 +103,14 @@ trait HasRoleImplementation
      */
     public function assignRole($role)
     {
+        $this->deleteRoleCache();
+
         return $this->mapArray($role, function ($role) {
 
             $roleId = $this->parseRoleId($role);
 
             if ( ! $this->roles->keyBy('id')->has($roleId) ) {
+
                 $this->roles()->attach($roleId);
 
                 return $role;
@@ -125,6 +128,8 @@ trait HasRoleImplementation
      */
     public function revokeRole($role)
     {
+        $this->deleteRoleCache();
+
         return $this->mapArray($role, function ($role) {
 
             $roleId = $this->parseRoleId($role);
@@ -149,6 +154,8 @@ trait HasRoleImplementation
             return $sync;
         });
 
+        $this->deleteRoleCache();
+
         return $this->roles()->sync($sync);
     }
 
@@ -159,6 +166,8 @@ trait HasRoleImplementation
      */
     public function revokeAllRoles()
     {
+        $this->deleteRoleCache();
+
         return $this->roles()->detach();
     }
 
@@ -168,6 +177,16 @@ trait HasRoleImplementation
     |----------------------------------------------------------------------
     |
     */
+
+    /**
+     * Delete cache for this traits.
+     *
+     * @return null
+     */
+    protected function deleteRoleCache()
+    {
+        \Cache::forget('acl.getRolesById_'.$this->id);
+    }
 
     /**
      * @param $slug
