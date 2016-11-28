@@ -18,7 +18,7 @@ class CreatePermissionsTable extends Migration
             $table->integer('inherit_id')->unsigned()->nullable()->index();
             $table->foreign('inherit_id')->references('id')->on('permissions');
             $table->string('name')->index();
-            $table->string('slug')->index();
+            $table->string('slug', 1024)->index();
             $table->text('description')->nullable();
             $table->timestamps();
         });
