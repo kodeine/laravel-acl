@@ -1,6 +1,7 @@
 <?php namespace Kodeine\Acl\Models\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 class Permission extends Model
 {
@@ -51,6 +52,8 @@ class Permission extends Model
 
     /**
      * @param $value
+     *
+     * @throws Exception
      */
     public function setSlugAttribute($value)
     {
@@ -74,7 +77,12 @@ class Permission extends Model
         $value = array_filter($value, 'is_bool');
 
         // store as json.
-        $this->attributes['slug'] = json_encode($value);
+        $json = json_encode($value);
+        if (strlen($json) > 1024) {
+            throw new Exception('Slug max length (1024) is exceeded. Consider reducing amount ' .
+                            'of slug items and/or move them into different permission.');
+        }
+        $this->attributes['slug'] = $json;
     }
 
 }
