@@ -1,6 +1,11 @@
 <?php namespace Kodeine\Acl\Traits;
 
-
+/**
+ * Class HasRoleImplementation
+ * @package Kodeine\Acl\Traits
+ *
+ * @method static Builder|Collection|\Eloquent role($role, $column = null)
+ */
 trait HasRoleImplementation
 {
     use HasPermission;
@@ -50,17 +55,26 @@ trait HasRoleImplementation
      * role. Role can be an id or slug.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int|string                            $role
+     * @param int|string $role
+     * @param string $column
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeRole($query, $role)
+    public function scopeRole($query, $role, $column = null)
     {
         if (is_null($role)) {
             return $query;
         }
-        
-        return $query->whereHas('roles', function ($query) use ($role) {
-            $query->where(is_numeric($role) ? 'id' : 'slug', $role);
+
+        return $query->whereHas('roles', function ($query) use ($role, $column) {
+            if (is_array($role)) {
+                $queryColumn = !is_null($column) ? $column : 'roles.slug';
+
+                $query->whereIn($queryColumn, $role);
+            } else {
+                $queryColumn = !is_null($column) ? $column : (is_numeric($role) ? 'roles.id' : 'roles.slug');
+
+                $query->where($queryColumn, $role);
+            }
         });
     }
 
