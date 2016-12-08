@@ -22,6 +22,16 @@ class Role extends Model
     protected $table = 'roles';
 
     /**
+     * Use the slug of the Role
+     * instead of the ID.
+     *
+     * @return string
+     */
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+    
+    /**
      * Roles can belong to many users.
      *
      * @return Model
