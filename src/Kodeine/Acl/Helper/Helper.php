@@ -93,7 +93,7 @@ trait Helper
 
     /**
      * @param          $item
-     * @param callable $closure
+     * @param \Closure $closure
      * @return array
      */
     protected function mapArray($item, \Closure $closure)
