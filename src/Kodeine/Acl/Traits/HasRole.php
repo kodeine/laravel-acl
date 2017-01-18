@@ -281,7 +281,7 @@ trait HasRoleImplementation
 }
 
 $laravel = app();
-if (version_compare($laravel::VERSION, '5.3', '<')) {
+if ($laravel instanceof \Illuminate\Foundation\Application && version_compare($laravel::VERSION, '5.3', '<')) {
     trait HasRole
     {
         use HasRoleImplementation {
