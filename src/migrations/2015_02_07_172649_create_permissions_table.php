@@ -14,6 +14,7 @@ class CreatePermissionsTable extends Migration
     public function up()
     {
         Schema::create('permissions', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('inherit_id')->unsigned()->nullable()->index();
             $table->foreign('inherit_id')->references('id')->on('permissions');
