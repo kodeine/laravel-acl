@@ -86,11 +86,20 @@ trait HasRoleImplementation
      */
     public function hasRole($slug, $operator = null)
     {
-        $operator = is_null($operator) ? $this->parseOperator($slug) : $operator;
+        // $operator = is_null($operator) ? $this->parseOperator($slug) : $operator;
 
+        if (strpos($slug, '|') !== false) {
+            $operator = 'and';
+        }
+        if (strpos($slug, ',') !== false) {
+            $operator = 'or';
+        }
         $roles = $this->getRoles();
         $roles = $roles instanceof \Illuminate\Contracts\Support\Arrayable ? $roles->toArray() : (array) $roles;
+        // return $this->hasDelimiterToArray($slug);
+        $roles = array_map('strtolower', $roles);
         $slug = $this->hasDelimiterToArray($slug);
+
 
         // array of slugs
         if ( is_array($slug) ) {
