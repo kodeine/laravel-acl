@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl;
+<?php
+
+namespace Kodeine\Acl;
 
 use Blade;
 use Illuminate\Support\ServiceProvider;
@@ -20,7 +22,7 @@ class AclServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig();
-        $this->publishMigration();
+        $this->loadMigrations();
 
         $laravel = app();
         if ( starts_with($laravel::VERSION, '5.0') ) {
@@ -55,11 +57,9 @@ class AclServiceProvider extends ServiceProvider
     /**
      * Publish the migration to the application migration folder
      */
-    public function publishMigration()
+    public function loadMigrations()
     {
-        $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('/database/migrations'),
-        ], 'migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
     }
 
     /**

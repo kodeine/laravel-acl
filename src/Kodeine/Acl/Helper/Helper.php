@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl\Helper;
+<?php
+
+namespace Kodeine\Acl\Helper;
 
 use Illuminate\Support\Collection;
 
@@ -122,5 +124,4 @@ trait Helper
         // single item
         return $closure($item);
     }
-
 }

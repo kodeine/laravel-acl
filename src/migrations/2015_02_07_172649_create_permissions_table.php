@@ -5,6 +5,15 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreatePermissionsTable extends Migration
 {
+    /**
+     * @var string
+     */
+    public $prefix;
+
+    public function __construct()
+    {
+        $this->prefix = config('acl.db_prefix');
+    }
 
     /**
      * Run the migrations.
@@ -13,14 +22,17 @@ class CreatePermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create($this->prefix . 'permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('inherit_id')->unsigned()->nullable()->index();
-            $table->foreign('inherit_id')->references('id')->on('permissions');
             $table->string('name')->index();
             $table->string('slug')->index();
             $table->text('description')->nullable();
             $table->timestamps();
+
+            $table->foreign('inherit_id')
+                ->references('id')
+                ->on($this->prefix . 'permissions');
         });
     }
 
@@ -31,7 +43,7 @@ class CreatePermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('permissions');
+        Schema::drop($this->prefix . 'permissions');
     }
 
 }
