@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php
+
+namespace Kodeine\Acl\Traits;
 
 use Illuminate\Support\Collection;
 
@@ -148,5 +150,4 @@ trait HasUserPermission
 
         return $collection->get($alias);
     }
-
 }

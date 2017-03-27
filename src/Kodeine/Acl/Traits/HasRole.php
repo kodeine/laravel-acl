@@ -1,5 +1,6 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php
 
+namespace Kodeine\Acl\Traits;
 
 trait HasRole
 {
@@ -20,8 +21,9 @@ trait HasRole
     public function roles()
     {
         $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $prefix = config('acl.db_prefix');
 
-        return $this->belongsToMany($model)->withTimestamps();
+        return $this->belongsToMany($model, $prefix . 'role_user')->withTimestamps();
     }
 
     /**
@@ -31,7 +33,8 @@ trait HasRole
      */
     public function getRoles()
     {
-        $slugs = $this->roles->lists('slug');
+        $slugs = $this->roles->pluck('slug');
+
         return is_null($this->roles)
             ? []
             : $this->collectionAsArray($slugs);
@@ -58,7 +61,7 @@ trait HasRole
      * @param  string $slug
      * @return bool
      */
-    public function is($slug, $operator = null)
+    public function isRole($slug, $operator = null)
     {
         $operator = is_null($operator) ? $this->parseOperator($slug) : $operator;
 
@@ -238,7 +241,7 @@ trait HasRole
         if ( starts_with($method, 'is') and $method !== 'is' and ! starts_with($method, 'isWith') ) {
             $role = substr($method, 2);
 
-            return $this->is($role);
+            return $this->isRole($role);
         }
 
         // Handle canDoSomething() methods
@@ -246,7 +249,7 @@ trait HasRole
             $permission = substr($method, 3);
             $permission = snake_case($permission, '.');
 
-            return $this->can($permission);
+            return $this->hasPermission($permission);
         }
 
         return parent::__call($method, $arguments);

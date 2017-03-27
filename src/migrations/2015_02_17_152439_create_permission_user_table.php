@@ -3,23 +3,41 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePermissionUserTable extends Migration {
+class CreatePermissionUserTable extends Migration
+{
+    /**
+     * @var string
+     */
+    public $prefix;
 
-	/**
+    public function __construct()
+    {
+        $this->prefix = config('acl.db_prefix');
+    }
+
+    /**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up()
 	{
-		Schema::create('permission_user', function (Blueprint $table) {
+		Schema::create($this->prefix . 'permission_user', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('permission_id')->unsigned()->index();
-			$table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
-			$table->integer('user_id')->unsigned()->index();
-			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-			$table->timestamps();
-		});
+            $table->integer('user_id')->unsigned()->index();
+            $table->timestamps();
+
+            $table->foreign('permission_id')
+                ->references('id')
+                ->on($this->prefix . 'permissions')
+                ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(config('acl.users_table'))
+                ->onDelete('cascade');
+        });
 	}
 
 	/**
@@ -29,7 +47,7 @@ class CreatePermissionUserTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('permission_user');
+		Schema::drop($this->prefix . 'permission_user');
 	}
 
 }

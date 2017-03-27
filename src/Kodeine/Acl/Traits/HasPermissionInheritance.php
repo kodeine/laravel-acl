@@ -1,5 +1,6 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php
 
+namespace Kodeine\Acl\Traits;
 
 trait HasPermissionInheritance
 {
@@ -191,5 +192,4 @@ trait HasPermissionInheritance
 
         return (int) $permission;
     }*/
-
 }
