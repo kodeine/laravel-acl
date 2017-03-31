@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+class Permiso extends Model
 {
     /**
      * The attributes that are fillable via mass assignment.
@@ -16,7 +16,7 @@ class Permission extends Model
      *
      * @var string
      */
-    protected $table = 'permissions';
+    protected $table = 'permiso';
 
     /**
      * Permissions can belong to many roles.
@@ -25,7 +25,7 @@ class Permission extends Model
      */
     public function roles()
     {
-        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Rol');
 
         return $this->belongsToMany($model)->withTimestamps();
     }

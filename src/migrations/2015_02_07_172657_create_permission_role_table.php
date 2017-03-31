@@ -13,12 +13,12 @@ class CreatePermissionRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('permission_role', function (Blueprint $table) {
+        Schema::create('permiso_rol', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('permission_id')->unsigned()->index();
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
-            $table->integer('role_id')->unsigned()->index();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->integer('permiso_id')->unsigned()->index();
+            $table->foreign('permiso_id')->references('id')->on('permiso')->onDelete('cascade');
+            $table->integer('rol_id')->unsigned()->index();
+            $table->foreign('rol_id')->references('id')->on('rol')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,7 +30,7 @@ class CreatePermissionRoleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('permission_role');
+        Schema::drop('permiso_rol');
     }
 
 }

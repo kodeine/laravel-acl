@@ -24,7 +24,7 @@ trait HasRoleImplementation
      */
     public function roles()
     {
-        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Rol');
 
         return $this->belongsToMany($model)->withTimestamps();
     }
@@ -65,13 +65,13 @@ trait HasRoleImplementation
             return $query;
         }
 
-        return $query->whereHas('roles', function ($query) use ($role, $column) {
+        return $query->whereHas('rol', function ($query) use ($role, $column) {
             if (is_array($role)) {
-                $queryColumn = !is_null($column) ? $column : 'roles.slug';
+                $queryColumn = !is_null($column) ? $column : 'rol.slug';
 
                 $query->whereIn($queryColumn, $role);
             } else {
-                $queryColumn = !is_null($column) ? $column : (is_numeric($role) ? 'roles.id' : 'roles.slug');
+                $queryColumn = !is_null($column) ? $column : (is_numeric($role) ? 'rol.id' : 'rol.slug');
 
                 $query->where($queryColumn, $role);
             }
@@ -226,7 +226,7 @@ trait HasRoleImplementation
     {
         if ( is_string($role) || is_numeric($role) ) {
 
-            $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+            $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Rol');
             $key = is_numeric($role) ? 'id' : 'slug';
             $alias = (new $model)->where($key, $role)->first();
 

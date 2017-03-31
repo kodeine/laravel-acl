@@ -136,7 +136,7 @@ trait HasPermissionInheritance
             return $cache;
         }
 
-        $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+        $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permiso');
         $query = (new $model)->where('id', $inherit_id)->first();
 
         return is_object($query) ? $this->setCache($query) : false;

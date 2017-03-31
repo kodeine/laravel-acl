@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use Kodeine\Acl\Traits\HasPermission;
 
-class Role extends Model
+class Rol extends Model
 {
     use HasPermission;
 
@@ -19,7 +19,7 @@ class Role extends Model
      *
      * @var string
      */
-    protected $table = 'roles';
+    protected $table = 'rol';
 
     /**
      * Roles can belong to many users.
