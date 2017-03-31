@@ -8,8 +8,8 @@ return [
      * to package's model. You can define your model here.
      */
 
-    'role'       => 'Kodeine\Acl\Models\Eloquent\Role',
-    'permission' => 'Kodeine\Acl\Models\Eloquent\Permission',
+    'role'       => 'Kodeine\Acl\Models\Eloquent\Rol',
+    'permission' => 'Kodeine\Acl\Models\Eloquent\Permiso',
 
     /**
      * Most Permissive Wins right

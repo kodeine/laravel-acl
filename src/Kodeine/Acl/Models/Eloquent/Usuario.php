@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Kodeine\Acl\Traits\HasRole;
 
-class User extends Model
+class Usuario extends Model
 {
     use Authenticatable, CanResetPassword, HasRole, SoftDeletes;
     
@@ -24,5 +24,5 @@ class User extends Model
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'usuario';
 }

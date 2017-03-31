@@ -20,7 +20,7 @@ trait HasPermission
      */
     public function permissions()
     {
-        $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+        $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permiso');
 
         return $this->belongsToMany($model)->withTimestamps();
     }
@@ -85,7 +85,7 @@ trait HasPermission
         // lets call our base can() method
         // from role class. $merge already
         // has user & role permissions
-        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Rol');
 
         return (new $model)->can($permission, $operator, $merge);
     }
@@ -175,7 +175,7 @@ trait HasPermission
     {
         if ( is_string($permission) || is_numeric($permission) ) {
 
-            $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+            $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permiso');
             $key = is_numeric($permission) ? 'id' : 'name';
             $alias = (new $model)->where($key, $permission)->first();
 
