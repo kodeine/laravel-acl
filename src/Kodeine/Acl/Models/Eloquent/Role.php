@@ -37,7 +37,7 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(config('auth.provider.users.model'))->withTimestamps();
+        return $this->belongsToMany(config('auth.providers.users.model'))->withTimestamps();
     }
 
     /**
