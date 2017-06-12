@@ -67,6 +67,11 @@ trait HasRole
 
         $roles = $this->getRoles();
         $slug = $this->hasDelimiterToArray($slug);
+        
+        // create array for the use of php array functions.
+        if ( ! is_array($roles) ) {
+            $roles = $roles->toArray();
+        }
 
         // array of slugs
         if ( is_array($slug) ) {
