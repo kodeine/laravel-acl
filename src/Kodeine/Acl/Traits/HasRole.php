@@ -36,7 +36,7 @@ trait HasRoleImplementation
      */
     public function getRoles()
     {
-        $this_roles = \Cache::remember(
+        $this_roles = \Cache::tags(config('acl.cacheTags', []))->remember(
             'acl.getRolesById_'.$this->id,
             config('acl.cacheMinutes'),
             function () {
