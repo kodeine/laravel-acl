@@ -29,6 +29,7 @@ class AclServiceProvider extends ServiceProvider
             $this->registerBlade5_1();
         } else {
             $this->registerBlade5_3();
+		    $this->loadMigrationsFrom(__DIR__.'/../../migrations');
         }
     }
 
