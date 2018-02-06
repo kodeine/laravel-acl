@@ -35,7 +35,7 @@ trait HasPermission
     {
         // user permissions overridden from role.
         $permissions = \Cache::tags(config('acl.cacheTags', []))->remember(
-            'acl.getPermissionsById_'.$this->id,
+            'acl.getPermissionsById_' . $this->id,
             config('acl.cacheMinutes'),
             function () {
                 return $this->getPermissionsInherited();
@@ -48,9 +48,9 @@ trait HasPermission
         // true values.
         foreach ($this->roles as $role) {
             foreach ($role->getPermissions() as $slug => $array) {
-                if ( array_key_exists($slug, $permissions) ) {
+                if (array_key_exists($slug, $permissions)) {
                     foreach ($array as $clearance => $value) {
-                        if( !array_key_exists( $clearance, $permissions[$slug] ) ) {
+                        if (array_key_exists($clearance, $permissions[$slug])) {
                             ! $value ?: $permissions[$slug][$clearance] = true;
                         }
                     }
