@@ -26,7 +26,7 @@ trait HasRoleImplementation
     {
         $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
 
-        return $this->belongsToMany($model)->withTimestamps();
+        return $this->belongsToMany($model)->withTimestamps()->orderBy('roles.created_at');
     }
 
     /**
@@ -36,7 +36,7 @@ trait HasRoleImplementation
      */
     public function getRoles()
     {
-        $this_roles = \Cache::remember(
+        $this_roles = \Cache::tags(config('acl.cacheTags', []))->remember(
             'acl.getRolesById_'.$this->id,
             config('acl.cacheMinutes'),
             function () {

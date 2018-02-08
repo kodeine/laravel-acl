@@ -27,4 +27,11 @@ return [
      */
 		
     'cacheMinutes' => 1,
+
+    /**
+     * Cache tags
+     *
+     * All cached entries are tagged to easily purge them on demand
+     */
+    'cacheTags' => ['acl']
 ];
