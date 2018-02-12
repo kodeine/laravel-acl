@@ -36,5 +36,12 @@
         "psr-4": {
             "Kodeine\\Acl\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+	    "laravel": {
+		    "providers": [
+                "Kodeine\\Acl\\AclServiceProvider"
+            ]
+	    }
     }
 }
