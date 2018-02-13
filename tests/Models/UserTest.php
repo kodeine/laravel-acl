@@ -67,7 +67,9 @@ class UserTest extends ModelsTest
         
         $user->syncRoles(str_slug('Admin role', config('laravel-auth.slug-separator')));
         
-        $this->assertEquals($user->getRoles(), [ 1 => str_slug('Admin role', config('laravel-auth.slug-separator'))]);
+        $this->assertEquals($user->getRoles(), [ 1 => [
+            str_slug('Admin role', config('laravel-auth.slug-separator'))
+        ]]);
     }
 
     /** @test */
@@ -103,7 +105,9 @@ class UserTest extends ModelsTest
         $user->save();
         $user->syncRoles($role);
    
-        $this->assertEquals($user->getRoles(), [ 1 => str_slug('Admin role', config('laravel-auth.slug-separator'))]);
+        $this->assertEquals($user->getRoles(), [ 1 => [
+            str_slug('Admin role', config('laravel-auth.slug-separator'))
+        ]]);
         $this->assertEquals($user->getPermissions(), ['post' => $permissionAttributes['slug']]);
     }
 

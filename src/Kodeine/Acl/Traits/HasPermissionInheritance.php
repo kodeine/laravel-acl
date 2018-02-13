@@ -15,7 +15,7 @@ trait HasPermissionInheritance
     public function getPermissionsInherited()
     {
         $rights = [];
-        $permissions = $this->permissions;
+        $permissions = $this->permissions()->get();
 
         // ntfs permissions
         // determine if ntfs is enabled
@@ -48,7 +48,7 @@ trait HasPermissionInheritance
             $merge = $permissions->where('name', $row->name);
             $merge = method_exists($merge, 'pluck') ? $merge->pluck('slug', 'name') : $merge->lists('slug', 'name');
 
-                // fix for l5.1 and backward compatibility.
+            // fix for l5.1 and backward compatibility.
             // lists() method should return as an array.
             $merge = $this->collectionAsArray($merge);
 
