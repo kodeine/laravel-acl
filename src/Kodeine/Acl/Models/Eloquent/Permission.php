@@ -19,6 +19,16 @@ class Permission extends Model
     protected $table = 'permissions';
 
     /**
+     * Use the slug of the Permission
+     * instead of the ID.
+     *
+     * @return string
+     */
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+    
+    /**
      * Permissions can belong to many roles.
      *
      * @return Model
