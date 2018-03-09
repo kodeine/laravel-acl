@@ -53,7 +53,22 @@ trait HasPermissionInheritance
             $merge = $this->collectionAsArray($merge);
 
             // replace and merge permissions
-            $rights = array_replace_recursive($rights, $inherited, $merge);
+            if ($inherited) {
+                foreach ($merge as $name => $perms) {
+                    foreach ($perms as $pname => $pvalue) {
+                        $inherited[$name] = isset($inherited[$name]) ? $inherited[$name] : [];
+                        $inherited[$name][$pname] = empty($inherited[$name][$pname]) ? $merge[$name][$pname] : $inherited[$name][$pname];
+                    }
+                }
+            } else {
+                $inherited = $merge;
+            }
+            foreach ($inherited as $name => $perms) {
+                foreach ($perms as $pname => $pvalue) {
+                    $rights[$name] = isset($rights[$name]) ? $rights[$name] : [];
+                    $rights[$name][$pname] = empty($rights[$name][$pname]) ? $inherited[$name][$pname] : $rights[$name][$pname];
+                }
+            }
 
             // make sure we don't unset if
             // inherited & slave permission
