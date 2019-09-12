@@ -15,7 +15,6 @@ class MigrationsTest extends TestCase
         $filesystem = $this->app['files'];
         $src        = $this->getMigrationsSrcPath();
         $dest       = $this->getMigrationsDestPath();
-        echo $dest;
 
         $this->assertCount(0, $filesystem->allFiles($dest));
 

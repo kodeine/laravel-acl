@@ -18,14 +18,14 @@ class RoleTest extends ModelsTest
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->roleModel = new Role;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -74,7 +74,7 @@ class RoleTest extends ModelsTest
     {
         $attributes = [
             'name'        => 'Custom role',
-            'slug'        => str_slug('Custom role', config('laravel-auth.slug-separator')),
+            'slug'        => $this->str_slug('Custom role', config('laravel-auth.slug-separator')),
             'description' => 'Custom role description.',
         ];
     
@@ -84,7 +84,7 @@ class RoleTest extends ModelsTest
         $this->assertEquals($attributes['slug'], $role->slug);
         $this->assertEquals($attributes['description'], $role->description);
     
-        $this->seeInDatabase('roles', $attributes);
+        $this->assertDatabaseHas('roles', $attributes);
     }
     
     /** @test */
@@ -94,8 +94,8 @@ class RoleTest extends ModelsTest
     
         $role = $this->createRole($attributes);
     
-        $this->seeInDatabase('roles', $attributes);
-        $this->seeInDatabase('roles', $role->toArray());
+        $this->assertDatabaseHas('roles', $attributes);
+        $this->assertDatabaseHas('roles', $role->toArray());
     
         $updatedAttributes = [
             'name'        => 'Custom role',
@@ -104,9 +104,9 @@ class RoleTest extends ModelsTest
     
         $role->update($updatedAttributes);
     
-        $this->dontSeeInDatabase('roles', $attributes);
-        $this->seeInDatabase('roles', $updatedAttributes);
-        $this->seeInDatabase('roles', $role->toArray());
+        $this->assertDatabaseMissing('roles', $attributes);
+        $this->assertDatabaseHas('roles', $updatedAttributes);
+        $this->assertDatabaseHas('roles', $role->toArray());
     }
     
     /** @test */
@@ -114,11 +114,11 @@ class RoleTest extends ModelsTest
     {
         $role = $this->createRole();
     
-        $this->seeInDatabase('roles', $role->toArray());
+        $this->assertDatabaseHas('roles', $role->toArray());
     
         $role->delete();
     
-        $this->dontSeeInDatabase('roles', $role->toArray());
+        $this->assertDatabaseMissing('roles', $role->toArray());
     }
     
     /* ------------------------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ class RoleTest extends ModelsTest
     {
         return [
             'name'        => 'Admin',
-            'slug'        => str_slug('Admin role', config('laravel-auth.slug-separator')),
+            'slug'        => $this->str_slug('Admin role', config('laravel-auth.slug-separator')),
             'description' => 'Admin role descriptions.',
         ];
     }
