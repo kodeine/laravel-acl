@@ -23,9 +23,8 @@
         "illuminate/support": "~5.0 || ~6.0"
     },
     "require-dev": {
-        "php": ">=7.2",
-        "phpunit/phpunit": "~8.0",
-        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "~4.0 || ~8.0",
+        "orchestra/testbench": "~3.0 || ^4.0",
         "doctrine/dbal": "^2.9"
     },
     "autoload": {
