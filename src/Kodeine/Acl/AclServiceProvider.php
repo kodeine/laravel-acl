@@ -23,7 +23,7 @@ class AclServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig();
-        $this->publishMigration();
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
 
         $laravel = app();
         if ( substr($laravel::VERSION, 0, 2) === (string) "5.0" ) {
@@ -55,14 +55,6 @@ class AclServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../config/acl.php' => config_path('acl.php'),
         ], 'config');
-    }
-
-    /**
-     * Publish the migration to the application migration folder
-     */
-    public function loadMigrations()
-    {
-        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
     }
 
     protected function registerBlade5_3()

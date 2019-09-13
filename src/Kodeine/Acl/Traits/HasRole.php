@@ -1,5 +1,8 @@
 <?php
 
+namespace Kodeine\Acl\Traits;
+
+use Kodeine\Acl\Traits\HasPermission;
 /**
  * Class HasRoleImplementation
  * @package Kodeine\Acl\Traits

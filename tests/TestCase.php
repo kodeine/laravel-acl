@@ -129,14 +129,4 @@ abstract class TestCase extends BaseTestCase
     {
         $this->artisan('migrate:reset')->run();
     }
-
-    /**
-     * Publish the migrations.
-     */
-    protected function publishMigrations()
-    {
-        $this->artisan('vendor:publish', [
-            '--tag' => ['migrations'],
-        ])->run();
-    }
 }
