@@ -4,6 +4,7 @@ namespace Kodeine\Acl;
 
 use Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AclServiceProvider extends ServiceProvider
 {
@@ -22,13 +23,15 @@ class AclServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig();
-        $this->loadMigrations();
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
 
         $laravel = app();
-        if ( starts_with($laravel::VERSION, '5.0') ) {
+        if ( substr($laravel::VERSION, 0, 2) === (string) "5.0" ) {
             $this->registerBlade5_0();
-        } else {
+        } else if ( (substr($laravel::VERSION, 0, 2) === (string) "5.1") || (substr($laravel::VERSION, 0, 2) === (string) "5.2") ) {
             $this->registerBlade5_1();
+        } else {
+            $this->registerBlade5_3();
         }
     }
 
@@ -54,22 +57,11 @@ class AclServiceProvider extends ServiceProvider
         ], 'config');
     }
 
-    /**
-     * Publish the migration to the application migration folder
-     */
-    public function loadMigrations()
-    {
-        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
-    }
-
-    /**
-     * Register Blade Template Extensions for >= L5.1
-     */
-    protected function registerBlade5_1()
+    protected function registerBlade5_3()
     {
         // role
         Blade::directive('role', function ($expression) {
-            return "<?php if (Auth::check() && Auth::user()->isRole({$expression})): ?>";
+            return "<?php if (Auth::check() && Auth::user()->hasRole({$expression})): ?>";
         });
 
         Blade::directive('endrole', function () {
@@ -78,7 +70,31 @@ class AclServiceProvider extends ServiceProvider
 
         // permission
         Blade::directive('permission', function ($expression) {
-            return "<?php if (Auth::check() && Auth::user()->hasPermission({$expression})): ?>";
+            return "<?php if (Auth::check() && Auth::user()->can({$expression})): ?>";
+        });
+
+        Blade::directive('endpermission', function () {
+            return "<?php endif; ?>";
+        });
+    }
+
+     /**
+     * Register Blade Template Extensions for >= L5.1
+     */
+    protected function registerBlade5_1()
+    {
+        // role
+        Blade::directive('role', function ($expression) {
+            return "<?php if (Auth::check() && Auth::user()->is{$expression}): ?>";
+        });
+
+        Blade::directive('endrole', function () {
+            return "<?php endif; ?>";
+        });
+
+        // permission
+        Blade::directive('permission', function ($expression) {
+            return "<?php if (Auth::check() && Auth::user()->can{$expression}): ?>";
         });
 
         Blade::directive('endpermission', function () {

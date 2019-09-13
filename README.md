@@ -20,7 +20,7 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 
 # <a name="requirements"></a>Requirements
 
-* This package requires PHP 5.4+
+* This package requires PHP 5.5+
 
 # <a name="getting-started"></a>Getting Started
 
@@ -89,19 +89,21 @@ Here's the TODO list for the next release (**2.0**).
 * [ ] Refactoring the source code.
 * [ ] Correct all issues.
 * [ ] Adding cache to final user permissions.
-* [ ] Adding tests.
 
 # <a name="change-logs"></a>Change Logs
 
-** March 13, 2017
-* [x] Updated for Laravel 5.4.
-* [x] Migrations run locally instead of being published.
-* [x] Config option to specify database table prefix added.
-* [x] Config option to detail non-standard users table name added.
-* [x] `can()` renamed to `hasPermission()`.
-* [x] `is()` renamed to `isRole()`.
 
-**June 14, 2015 (latest)**
+**September 22, 2016**
+* [x] Added unit tests
+
+**September 20, 2016**
+* [x] Added support for Laravel 5.3
+
+*September 19, 2016*
+* [x] Added cache support to Roles and Permissions.
+
+*June 14, 2015*
+
 * [x] Added backward compatibility to l5.0 for lists() method.
 * [x] Added [Blade Template Extensions](https://github.com/kodeine/laravel-acl/wiki/Blade-Extensions).
 

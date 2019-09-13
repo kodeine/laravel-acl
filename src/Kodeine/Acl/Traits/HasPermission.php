@@ -40,7 +40,13 @@ trait HasPermission
     public function getPermissions()
     {
         // user permissions overridden from role.
-        $permissions = $this->getPermissionsInherited();
+        $permissions = \Cache::remember(
+            'acl.getPermissionsById_'.$this->id,
+            config('acl.cacheMinutes'),
+            function () {
+                return $this->getPermissionsInherited();
+            }
+        );
 
         // permissions based on role.
         // more permissive permission wins
@@ -50,7 +56,9 @@ trait HasPermission
             foreach ($role->getPermissions() as $slug => $array) {
                 if (array_key_exists($slug, $permissions)) {
                     foreach ($array as $clearance => $value) {
-                        ! $value ?: $permissions[$slug][$clearance] = true;
+                        if( !array_key_exists( $clearance, $permissions[$slug] ) ) {
+                            ! $value ?: $permissions[$slug][$clearance] = true;
+                        }
                     }
                 } else {
                     $permissions = array_merge($permissions, [$slug => $array]);
@@ -73,7 +81,13 @@ trait HasPermission
     {
         // user permissions including
         // all of user role permissions
-        $merge = $this->getPermissions();
+        $merge =  \Cache::remember(
+            'acl.getMergeById_'.$this->id,
+            config('acl.cacheMinutes'),
+            function () {
+                return $this->getPermissions();
+            }
+        );
 
         // lets call our base hasPermission() method
         // from role class. $merge already

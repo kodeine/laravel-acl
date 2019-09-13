@@ -31,13 +31,23 @@ class Role extends Model
     }
 
     /**
+     * Use the slug of the Role
+     * instead of the ID.
+     *
+     * @return string
+     */
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+    
+    /**
      * Roles can belong to many users.
      *
      * @return Model
      */
     public function users()
     {
-        return $this->belongsToMany(config('auth.provider.users.model'))->withTimestamps();
+        return $this->belongsToMany(config('auth.providers.users.model', config('auth.model')))->withTimestamps();
     }
 
     /**
@@ -47,7 +57,13 @@ class Role extends Model
      */
     public function getPermissions()
     {
-        return $this->getPermissionsInherited();
+        return \Cache::remember(
+            'acl.getPermissionsInheritedById_'.$this->id,
+            config('acl.cacheMinutes'),
+            function () {
+                return $this->getPermissionsInherited();
+            }
+        );
     }
 
     /**

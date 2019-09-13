@@ -25,25 +25,10 @@ return [
 
     'most_permissive_wins' => false,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Database Table Prefix
-    |--------------------------------------------------------------------------
-    |
-    | If you want to add a prefix to the table names, define it here.  By default,
-    | no prefix is applied.
-    */
-
-    'db_prefix' => null,
-
-    /*
-    |--------------------------------------------------------------------------
-    | User Table
-    |--------------------------------------------------------------------------
-    |
-    | Most of the time the users are stored in a table named users.  If this is
-    | not true for your app, define the user table name here.
-    */
-
-    'users_table' => 'users',
+    /**
+     * Cache Minutes
+     * Set the minutes that roles and permissions will be cached.
+     */
+		
+    'cacheMinutes' => 1,
 ];

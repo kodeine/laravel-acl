@@ -24,20 +24,10 @@ class CreatePermissionUserTable extends Migration
 	{
 		Schema::create($this->prefix . 'permission_user', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('permission_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
-            $table->timestamps();
-
-            $table->foreign('permission_id')
-                ->references('id')
-                ->on($this->prefix . 'permissions')
-                ->onDelete('cascade');
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on(config('acl.users_table'))
-                ->onDelete('cascade');
-        });
+			$table->integer('permission_id')->unsigned()->index()->references('id')->on('permissions')->onDelete('cascade');
+			$table->integer('user_id')->unsigned()->index()->references('id')->on('users')->onDelete('cascade');
+			$table->timestamps();
+		});
 	}
 
 	/**
