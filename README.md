@@ -1,7 +1,7 @@
 
 # Kodeine/Laravel-ACL
 
-[![Laravel](https://img.shields.io/badge/Laravel-~5.0-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-~6.0-orange.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-kodeine/laravel--acl-blue.svg?style=flat-square)](https://github.com/kodeine/laravel-acl/)
 [![Build Status](http://img.shields.io/travis/kodeine/laravel--acl/master.svg?style=flat-square)](https://travis-ci.org/kodeine/laravel-acl)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
@@ -20,7 +20,7 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 
 # <a name="requirements"></a>Requirements
 
-* This package requires PHP 5.5+
+* This package requires PHP 7.2+
 
 # <a name="getting-started"></a>Getting Started
 
@@ -29,7 +29,7 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 ```
 "require": {
 ...
-"kodeine/laravel-acl": "~1.0@dev",
+"kodeine/laravel-acl": "master",
 ...
 },
 ```
@@ -39,10 +39,10 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 ```php
 'providers' => [
 
-Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
-Illuminate\Auth\AuthServiceProvider::class,
+'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+'Illuminate\Auth\AuthServiceProvider',
 ...
-Kodeine\Acl\AclServiceProvider::class,
+'Kodeine\Acl\AclServiceProvider',
 
 ],
 ```
@@ -62,7 +62,7 @@ $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
 protected $routeMiddleware = [
 
 ....
-'acl' => Kodeine\Acl\Middleware\HasPermission::class,
+'acl' => 'Kodeine\Acl\Middleware\HasPermission',
 
 ];
 ```
@@ -74,7 +74,7 @@ use Kodeine\Acl\Traits\HasRole;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, HasRole;
+use Authenticatable, CanResetPassword, HasRole;
 }
 ```
 
@@ -92,18 +92,19 @@ Here's the TODO list for the next release (**2.0**).
 
 # <a name="change-logs"></a>Change Logs
 
+**September 13, 2019**
+* [x] Added support for Laravel 6
 
-**September 22, 2016**
+*September 22, 2016**
 * [x] Added unit tests
 
-**September 20, 2016**
+*September 20, 2016**
 * [x] Added support for Laravel 5.3
 
 *September 19, 2016*
 * [x] Added cache support to Roles and Permissions.
 
 *June 14, 2015*
-
 * [x] Added backward compatibility to l5.0 for lists() method.
 * [x] Added [Blade Template Extensions](https://github.com/kodeine/laravel-acl/wiki/Blade-Extensions).
 
