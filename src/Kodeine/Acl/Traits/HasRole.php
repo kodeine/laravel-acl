@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php
 
 /**
  * Class HasRoleImplementation
@@ -25,8 +25,9 @@ trait HasRoleImplementation
     public function roles()
     {
         $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $prefix = config('acl.db_prefix');
 
-        return $this->belongsToMany($model)->withTimestamps();
+        return $this->belongsToMany($model, $prefix . 'role_user')->withTimestamps();
     }
 
     /**
@@ -264,7 +265,6 @@ trait HasRoleImplementation
         // Handle isRoleSlug() methods
         if ( starts_with($method, 'is') and $method !== 'is' and ! starts_with($method, 'isWith') ) {
             $role = substr($method, 2);
-
             return $this->hasRole($role);
         }
 
@@ -273,7 +273,7 @@ trait HasRoleImplementation
             $permission = substr($method, 3);
             $permission = snake_case($permission, '.');
 
-            return $this->can($permission);
+            return $this->hasPermission($permission);
         }
 
         return parent::__call($method, $arguments);

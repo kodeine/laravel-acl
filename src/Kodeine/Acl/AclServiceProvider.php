@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl;
+<?php
+
+namespace Kodeine\Acl;
 
 use Blade;
 use Illuminate\Support\ServiceProvider;
@@ -58,11 +60,9 @@ class AclServiceProvider extends ServiceProvider
     /**
      * Publish the migration to the application migration folder
      */
-    public function publishMigration()
+    public function loadMigrations()
     {
-        $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('/database/migrations'),
-        ], 'migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
     }
 
     protected function registerBlade5_3()
@@ -85,7 +85,8 @@ class AclServiceProvider extends ServiceProvider
             return "<?php endif; ?>";
         });
     }
-        /**
+
+     /**
      * Register Blade Template Extensions for >= L5.1
      */
     protected function registerBlade5_1()

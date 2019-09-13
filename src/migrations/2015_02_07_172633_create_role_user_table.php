@@ -5,6 +5,15 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateRoleUserTable extends Migration
 {
+    /**
+     * @var string
+     */
+    public $prefix;
+
+    public function __construct()
+    {
+        $this->prefix = config('acl.db_prefix');
+    }
 
     /**
      * Run the migrations.
@@ -13,11 +22,23 @@ class CreateRoleUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_user', function (Blueprint $table) {
+        Schema::create($this->prefix . 'role_user', function (Blueprint $table) {
             $table->increments('id');
+
             $table->integer('role_id')->unsigned()->index()->foreign()->references("id")->on("roles")->onDelete("cascade");
             $table->integer('user_id')->unsigned()->index()->foreign()->references("id")->on("users")->onDelete("cascade");
+
             $table->timestamps();
+
+            $table->foreign('role_id')
+                ->references('id')
+                ->on($this->prefix . 'roles')
+                ->onDelete('cascade');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on(config('acl.users_table'))
+                ->onDelete('cascade');
         });
     }
 
@@ -28,7 +49,7 @@ class CreateRoleUserTable extends Migration
      */
     public function down()
     {
-        Schema::drop('role_user');
+        Schema::drop($this->prefix . 'role_user');
     }
 
 }

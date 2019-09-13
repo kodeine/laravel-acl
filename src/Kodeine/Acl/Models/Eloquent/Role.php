@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl\Models\Eloquent;
+<?php
+
+namespace Kodeine\Acl\Models\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 use Kodeine\Acl\Traits\HasPermission;
@@ -19,7 +21,14 @@ class Role extends Model
      *
      * @var string
      */
-    protected $table = 'roles';
+    protected $table;
+
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('acl.db_prefix') . 'roles';
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Use the slug of the Role
@@ -65,7 +74,7 @@ class Role extends Model
      * @param array  $mergePermissions
      * @return bool
      */
-    public function can($permission, $operator = null, $mergePermissions = [])
+    public function hasPermission($permission, $operator = null, $mergePermissions = [])
     {
         $operator = is_null($operator) ? $this->parseOperator($permission) : $operator;
 
@@ -124,5 +133,4 @@ class Role extends Model
 
         return false;
     }
-
 }

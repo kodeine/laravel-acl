@@ -5,6 +5,15 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateRolesTable extends Migration
 {
+    /**
+     * @var string
+     */
+    public $prefix;
+
+    public function __construct()
+    {
+        $this->prefix = config('acl.db_prefix');
+    }
 
     /**
      * Run the migrations.
@@ -13,7 +22,7 @@ class CreateRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create($this->prefix . 'roles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('slug')->unique();
@@ -29,7 +38,7 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('roles');
+        Schema::drop($this->prefix . 'roles');
     }
 
 }

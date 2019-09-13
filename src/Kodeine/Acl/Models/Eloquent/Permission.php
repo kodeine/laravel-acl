@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl\Models\Eloquent;
+<?php
+
+namespace Kodeine\Acl\Models\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +18,14 @@ class Permission extends Model
      *
      * @var string
      */
-    protected $table = 'permissions';
+    protected $table;
+
+    public function __construct(array $attributes = [])
+    {
+        $this->table = config('acl.db_prefix') . 'permissions';
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Permissions can belong to many roles.
@@ -76,5 +85,4 @@ class Permission extends Model
         // store as json.
         $this->attributes['slug'] = json_encode($value);
     }
-
 }
