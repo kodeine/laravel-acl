@@ -1,7 +1,7 @@
 
 # Kodeine/Laravel-ACL
 
-[![Laravel](https://img.shields.io/badge/Laravel-~6.0-orange.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-~6.0-green.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-kodeine/laravel--acl-blue.svg?style=flat-square)](https://github.com/kodeine/laravel-acl/)
 [![Build Status](https://img.shields.io/travis/kodeine/laravel-acl/master?style=flat-square)](https://travis-ci.org/kodeine/laravel-acl)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
@@ -21,35 +21,35 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 6.0+.
 
 # <a name="requirements"></a>Requirements
 
-* This package requires PHP 7.2+
-* Laravel 6.0+
+* Version 2.x of this package requires PHP 7.2+ and Laravel 6.0+ 
+* Version 1.x requires PHP 5.6+ and Laravel 5.0+
 
 # <a name="getting-started"></a>Getting Started
 
-1. Require the package in your `composer.json` and update your dependency with `composer update`:
+Install the package using composer 
 
 ```
-"require": {
-...
-"kodeine/laravel-acl": "master",
-...
-},
+composer require kodeine/laravel-acl
 ```
 
-2. Add the package to your application service providers in `config/app.php`.
+If you need to support Laravel 5.x, make sure to install version 1.x
+
+```
+composer require kodeine/laravel-acl "^1.0"
+```
+
+2. If you are using Laravel before version 5.4, manually register the service provider in your config/app.php file 
 
 ```php
 'providers' => [
-
-'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-'Illuminate\Auth\AuthServiceProvider',
-...
-'Kodeine\Acl\AclServiceProvider',
-
+    'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+    'Illuminate\Auth\AuthServiceProvider',
+    ...
+    'Kodeine\Acl\AclServiceProvider',
 ],
 ```
 
-3. Publish the package migrations to your application and run these with `php artisan migrate.
+3. Publish the package configuartion files and add your own models to the list of ACL models"
 
 ```
 $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
@@ -62,10 +62,8 @@ $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
 
 ```php
 protected $routeMiddleware = [
-
-....
-'acl' => 'Kodeine\Acl\Middleware\HasPermission',
-
+    ....
+    'acl' => 'Kodeine\Acl\Middleware\HasPermission',
 ];
 ```
 
@@ -80,19 +78,28 @@ use Authenticatable, CanResetPassword, HasRole;
 }
 ```
 
+6. Run the migrations to generate your roles and permissions tables
+
+```
+php artisan migrate
+```
+
 # <a name="documentation"></a>Documentation
 
 Follow along the [Wiki](https://github.com/kodeine/laravel-acl/wiki) to find out more.
 
 # <a name="roadmap"></a>Roadmap
 
-Here's the TODO list for the next release (**2.0**).
+Here's the TODO list for the next release.
 
 * [ ] Refactoring the source code.
 * [ ] Correct all issues.
 * [ ] Adding cache to final user permissions.
 
 # <a name="change-logs"></a>Change Logs
+
+**September 14 2019**
+* [x] Updated the readme to reflect new major release
 
 **September 13, 2019**
 * [x] Added support for Laravel 6
