@@ -5,6 +5,15 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreatePermissionRoleTable extends Migration
 {
+    /**
+     * @var string
+     */
+    public $prefix;
+
+    public function __construct()
+    {
+        $this->prefix = config('acl.db_prefix');
+    }
 
     /**
      * Run the migrations.
@@ -13,13 +22,21 @@ class CreatePermissionRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('permission_role', function (Blueprint $table) {
+        Schema::create($this->prefix . 'permission_role', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('permission_id')->unsigned()->index();
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
             $table->integer('role_id')->unsigned()->index();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
+
+            $table->foreign('permission_id')
+                ->references('id')
+                ->on($this->prefix . 'permissions')
+                ->onDelete('cascade');
+
+            $table->foreign('role_id')
+                ->references('id')
+                ->on($this->prefix . 'roles')
+                ->onDelete('cascade');
         });
     }
 
@@ -30,7 +47,7 @@ class CreatePermissionRoleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('permission_role');
+        Schema::drop($this->prefix . 'permission_role');
     }
 
 }

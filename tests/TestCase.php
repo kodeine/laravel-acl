@@ -78,6 +78,22 @@ abstract class TestCase extends BaseTestCase
         ];
     }
 
+    // Lifted straight from Illuminate/Support/Str
+
+    public function str_slug($title, $separator = '-')
+    {
+        // Convert all dashes/underscores into separator
+        $flip = $separator === '-' ? '_' : '-';
+        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+        // Replace @ with the word 'at'
+        $title = str_replace('@', $separator.'at'.$separator, $title);
+        // Remove all characters that are not the separator, letters, numbers, or whitespace.
+        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', strtolower($title));
+        // Replace all separator characters and whitespace by a single separator
+        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+        return trim($title, $separator);
+    }
+
     /**
      * Get the migrations source path.
      *
@@ -103,10 +119,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function migrate()
     {
-        $this->artisan('migrate', [
-            '--database' => 'testing',
-            '--realpath' => $this->getMigrationsSrcPath(),
-        ]);
+        $this->loadMigrationsFrom($this->getMigrationsSrcPath());
     }
 
     /**
@@ -114,16 +127,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function resetMigration()
     {
-        $this->artisan('migrate:reset');
-    }
-
-    /**
-     * Publish the migrations.
-     */
-    protected function publishMigrations()
-    {
-        $this->artisan('vendor:publish', [
-            '--tag' => ['migrations'],
-        ]);
+        $this->artisan('migrate:reset')->run();
     }
 }

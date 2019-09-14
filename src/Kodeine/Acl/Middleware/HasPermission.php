@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl\Middleware;
+<?php
+
+namespace Kodeine\Acl\Middleware;
 
 use Closure;
 
@@ -85,7 +87,7 @@ class HasPermission
         $request = $this->request;
         $do = $this->getAction('can');
 
-        return ! $this->forbiddenRoute() && $request->user()->can($do);
+        return ! $this->forbiddenRoute() && $request->user()->hasPermission($do);
     }
 
     /**
@@ -131,7 +133,7 @@ class HasPermission
             return $e . '.' . $this->parseAlias();
         }, array_keys($crud)));
 
-        return ! $this->forbiddenRoute() && $request->user()->can($permission);
+        return ! $this->forbiddenRoute() && $request->user()->hasPermission($permission);
     }
     
     private function filterMethods($methods, $callback) {
@@ -235,5 +237,4 @@ class HasPermission
             $this->crud['resource'] = $resource;
         }
     }
-
 }

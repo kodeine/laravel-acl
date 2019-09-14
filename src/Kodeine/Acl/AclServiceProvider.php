@@ -1,7 +1,10 @@
-<?php namespace Kodeine\Acl;
+<?php
+
+namespace Kodeine\Acl;
 
 use Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AclServiceProvider extends ServiceProvider
 {
@@ -20,12 +23,12 @@ class AclServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig();
-        $this->publishMigration();
+        $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
 
         $laravel = app();
-        if ( starts_with($laravel::VERSION, '5.0') ) {
+        if ( substr($laravel::VERSION, 0, 2) === (string) "5.0" ) {
             $this->registerBlade5_0();
-        } else if ( starts_with($laravel::VERSION, ['5.1', '5.2']) ) {
+        } else if ( (substr($laravel::VERSION, 0, 2) === (string) "5.1") || (substr($laravel::VERSION, 0, 2) === (string) "5.2") ) {
             $this->registerBlade5_1();
         } else {
             $this->registerBlade5_3();
@@ -54,16 +57,6 @@ class AclServiceProvider extends ServiceProvider
         ], 'config');
     }
 
-    /**
-     * Publish the migration to the application migration folder
-     */
-    public function publishMigration()
-    {
-        $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('/database/migrations'),
-        ], 'migrations');
-    }
-
     protected function registerBlade5_3()
     {
         // role
@@ -84,7 +77,8 @@ class AclServiceProvider extends ServiceProvider
             return "<?php endif; ?>";
         });
     }
-        /**
+
+     /**
      * Register Blade Template Extensions for >= L5.1
      */
     protected function registerBlade5_1()

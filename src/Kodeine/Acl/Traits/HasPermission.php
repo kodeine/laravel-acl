@@ -1,4 +1,6 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php
+
+namespace Kodeine\Acl\Traits;
 
 use Kodeine\Acl\Helper\Helper;
 
@@ -20,9 +22,13 @@ trait HasPermission
      */
     public function permissions()
     {
-        $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+        $model  = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+        $prefix = config('acl.db_prefix');
 
-        return $this->belongsToMany($model)->withTimestamps();
+        $class = get_called_class();
+        $table = $class === config('auth.providers.users.model') ? 'permission_user' : 'permission_role';
+
+        return $this->belongsToMany($model, $prefix . $table)->withTimestamps();
     }
 
     /**
@@ -48,7 +54,7 @@ trait HasPermission
         // true values.
         foreach ($this->roles as $role) {
             foreach ($role->getPermissions() as $slug => $array) {
-                if ( array_key_exists($slug, $permissions) ) {
+                if (array_key_exists($slug, $permissions)) {
                     foreach ($array as $clearance => $value) {
                         if( !array_key_exists( $clearance, $permissions[$slug] ) ) {
                             ! $value ?: $permissions[$slug][$clearance] = true;
@@ -68,9 +74,10 @@ trait HasPermission
      *
      * @param  string $permission
      * @param  string $operator
+     *
      * @return bool
      */
-    public function can($permission, $operator = null)
+    public function hasPermission($permission, $operator = null)
     {
         // user permissions including
         // all of user role permissions
@@ -82,18 +89,19 @@ trait HasPermission
             }
         );
 
-        // lets call our base can() method
+        // lets call our base hasPermission() method
         // from role class. $merge already
         // has user & role permissions
         $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
 
-        return (new $model)->can($permission, $operator, $merge);
+        return (new $model)->hasPermission($permission, $operator, $merge);
     }
 
     /**
      * Assigns the given permission to the user.
      *
      * @param  collection|object|array|string|int $permission
+     *
      * @return bool
      */
     public function assignPermission($permission)
@@ -102,7 +110,7 @@ trait HasPermission
 
             $permissionId = $this->parsePermissionId($permission);
 
-            if ( ! $this->permissions->keyBy('id')->has($permissionId) ) {
+            if (! $this->permissions->keyBy('id')->has($permissionId)) {
                 $this->permissions()->attach($permissionId);
 
                 return $permission;
@@ -116,6 +124,7 @@ trait HasPermission
      * Revokes the given permission from the user.
      *
      * @param  collection|object|array|string|int $permission
+     *
      * @return bool
      */
     public function revokePermission($permission)
@@ -132,6 +141,7 @@ trait HasPermission
      * Syncs the given permission(s) with the user.
      *
      * @param  collection|object|array|string|int $permissions
+     *
      * @return bool
      */
     public function syncPermissions($permissions)
@@ -164,22 +174,22 @@ trait HasPermission
     |
     */
 
-
     /**
      * Parses permission id from object or array.
      *
      * @param object|array|int $permission
+     *
      * @return mixed
      */
     protected function parsePermissionId($permission)
     {
-        if ( is_string($permission) || is_numeric($permission) ) {
+        if (is_string($permission) || is_numeric($permission)) {
 
             $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
-            $key = is_numeric($permission) ? 'id' : 'name';
+            $key   = is_numeric($permission) ? 'id' : 'name';
             $alias = (new $model)->where($key, $permission)->first();
 
-            if ( ! is_object($alias) || ! $alias->exists ) {
+            if (! is_object($alias) || ! $alias->exists) {
                 throw new \InvalidArgumentException('Specified permission ' . $key . ' does not exists.');
             }
 
@@ -187,10 +197,10 @@ trait HasPermission
         }
 
         $model = '\Illuminate\Database\Eloquent\Model';
-        if ( is_object($permission) && $permission instanceof $model ) {
+        if (is_object($permission) && $permission instanceof $model) {
             $permission = $permission->getKey();
         }
 
-        return (int) $permission;
+        return (int)$permission;
     }
 }

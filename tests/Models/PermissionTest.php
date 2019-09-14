@@ -17,7 +17,7 @@ class PermissionTest extends ModelsTest
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -26,7 +26,7 @@ class PermissionTest extends ModelsTest
         $this->permissionModel = new Permission;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -78,7 +78,7 @@ class PermissionTest extends ModelsTest
         $this->assertEquals([$attributes['slug'] => true], $permission->slug);
         $this->assertEquals($attributes['description'], $permission->description);
 
-        $this->seeInDatabase('permissions', [
+        $this->assertDatabaseHas('permissions', [
             'name'        => 'Create users',
             'description' => 'Allow to create users',
         ]);
@@ -100,18 +100,18 @@ class PermissionTest extends ModelsTest
             'description' => 'Allow to update users',
         ];
 
-        $this->seeInDatabase('permissions', [
+        $this->assertDatabaseHas('permissions', [
             'name'        => 'Create users',
             'description' => 'Allow to create users',
         ]);
 
         $permission->update($updatedAttributes);
 
-        $this->seeInDatabase('permissions', [
+        $this->assertDatabaseHas('permissions', [
             'name'        => 'Update users',
             'description' => 'Allow to update users',
         ]);
-        $this->dontSeeInDatabase('permissions', $attributes);
+        $this->assertDatabaseMissing('permissions', $attributes);
     }
 
     /** @test */
@@ -125,13 +125,13 @@ class PermissionTest extends ModelsTest
 
         $permission = $this->permissionModel->create($attributes);
 
-        $this->seeInDatabase('permissions', [
+        $this->assertDatabaseHas('permissions', [
             'name'        => 'Create users',
             'description' => 'Allow to create users',
         ]);
 
         $permission->delete();
 
-        $this->dontSeeInDatabase('permissions', $attributes);
+        $this->assertDatabaseMissing('permissions', $attributes);
     }
 }
