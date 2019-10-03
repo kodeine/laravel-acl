@@ -24,15 +24,7 @@ class AclServiceProvider extends ServiceProvider
     {
         $this->publishConfig();
         $this->loadMigrationsFrom(__DIR__ . '/../../migrations');
-
-        $laravel = app();
-        if ( substr($laravel::VERSION, 0, 2) === (string) "5.0" ) {
-            $this->registerBlade5_0();
-        } else if ( (substr($laravel::VERSION, 0, 2) === (string) "5.1") || (substr($laravel::VERSION, 0, 2) === (string) "5.2") ) {
-            $this->registerBlade5_1();
-        } else {
-            $this->registerBlade5_3();
-        }
+        $this->registerBladeDirectives();
     }
 
     /**
@@ -56,8 +48,8 @@ class AclServiceProvider extends ServiceProvider
             __DIR__ . '/../../config/acl.php' => config_path('acl.php'),
         ], 'config');
     }
-
-    protected function registerBlade5_3()
+    
+    public function registerBladeDirectives()
     {
         // role
         Blade::directive('role', function ($expression) {
@@ -70,62 +62,11 @@ class AclServiceProvider extends ServiceProvider
 
         // permission
         Blade::directive('permission', function ($expression) {
-            return "<?php if (Auth::check() && Auth::user()->can({$expression})): ?>";
+            return "<?php if (Auth::check() && Auth::user()->hasPermission({$expression})): ?>";
         });
 
         Blade::directive('endpermission', function () {
             return "<?php endif; ?>";
-        });
-    }
-
-     /**
-     * Register Blade Template Extensions for >= L5.1
-     */
-    protected function registerBlade5_1()
-    {
-        // role
-        Blade::directive('role', function ($expression) {
-            return "<?php if (Auth::check() && Auth::user()->is{$expression}): ?>";
-        });
-
-        Blade::directive('endrole', function () {
-            return "<?php endif; ?>";
-        });
-
-        // permission
-        Blade::directive('permission', function ($expression) {
-            return "<?php if (Auth::check() && Auth::user()->can{$expression}): ?>";
-        });
-
-        Blade::directive('endpermission', function () {
-            return "<?php endif; ?>";
-        });
-    }
-
-    /**
-     * Register Blade Template Extensions for <= L5.0
-     */
-    protected function registerBlade5_0()
-    {
-        $blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
-        $blade->extend(function ($view, $compiler) {
-            $pattern = $compiler->createMatcher('role');
-            return preg_replace($pattern, '<?php if (Auth::check() && Auth::user()->is$2): ?> ', $view);
-        });
-
-        $blade->extend(function ($view, $compiler) {
-            $pattern = $compiler->createPlainMatcher('endrole');
-            return preg_replace($pattern, '<?php endif; ?>', $view);
-        });
-
-        $blade->extend(function ($view, $compiler) {
-            $pattern = $compiler->createMatcher('permission');
-            return preg_replace($pattern, '<?php if (Auth::check() && Auth::user()->can$2): ?> ', $view);
-        });
-
-        $blade->extend(function ($view, $compiler) {
-            $pattern = $compiler->createPlainMatcher('endpermission');
-            return preg_replace($pattern, '<?php endif; ?>', $view);
-        });
+        }); 
     }
 }
