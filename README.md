@@ -74,7 +74,7 @@ use Kodeine\Acl\Traits\HasRole;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-use Authenticatable, CanResetPassword, HasRole;
+    use Authenticatable, CanResetPassword, HasRole;
 }
 ```
 
