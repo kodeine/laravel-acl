@@ -15,7 +15,7 @@ trait HasPermissionInheritance
     public function getPermissionsInherited()
     {
         $rights = [];
-        $permissions = $this->permissions;
+        $permissions = $this->permissions()->get();
 
         // ntfs permissions
         // determine if ntfs is enabled

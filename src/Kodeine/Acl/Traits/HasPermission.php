@@ -46,7 +46,7 @@ trait HasPermission
         // more permissive permission wins
         // if user has multiple roles we keep
         // true values.
-        foreach ($this->roles as $role) {
+        foreach ($this->roles()->get() as $role) {
             foreach ($role->getPermissions() as $slug => $array) {
                 if ( array_key_exists($slug, $permissions) ) {
                     foreach ($array as $clearance => $value) {

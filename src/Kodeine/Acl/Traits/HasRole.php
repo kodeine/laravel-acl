@@ -40,7 +40,7 @@ trait HasRoleImplementation
             'acl.getRolesById_'.$this->id,
             config('acl.cacheMinutes'),
             function () {
-                return $this->roles;
+                return $this->roles()->get();
             }
         );
 
