@@ -80,6 +80,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 6. Run the migrations to generate your roles and permissions tables
 
+Please note that if you are upgrading to 6.0 from a previous version, the default column type for the id on the users table has changed. On certain databases foreign keys can only be defined with matching column types. As such, you will need to change the id column on your users table to bigInteger in to user this package. 
+
 ```
 php artisan migrate
 ```
