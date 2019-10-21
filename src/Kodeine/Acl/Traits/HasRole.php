@@ -48,10 +48,10 @@ trait HasRoleImplementation
             }
         );
 
-        $slugs = method_exists($this_roles, 'pluck') ? $this_roles->pluck('slug','id') : $this_roles->lists('slug','id');
+        $slugs = $this_roles->pluck('slug','id');
         return is_null($this_roles)
             ? []
-            : $this->collectionAsArray($slugs);
+            : $slugs->all();
     }
 
     /**
