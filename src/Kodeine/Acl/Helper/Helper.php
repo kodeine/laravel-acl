@@ -8,28 +8,6 @@ trait Helper
 {
     /*
     |----------------------------------------------------------------------
-    | Collection methods compatible with L5.1.
-    |----------------------------------------------------------------------
-    |
-    */
-
-    /**
-     * Lists() method in l5.1 returns collection.
-     * This method fixes that issue for backward
-     * compatibility.
-     *
-     * @param $data
-     * @return mixed
-     */
-    protected function collectionAsArray($data)
-    {
-        return ($data instanceof Collection)
-            ? $data->toArray()
-            : $data;
-    }
-
-    /*
-    |----------------------------------------------------------------------
     | Slug Permission Related Protected Methods
     |----------------------------------------------------------------------
     |
@@ -104,9 +82,7 @@ trait Helper
 
         // item is a collection.
         if ($item instanceof Collection) {
-            $item = $this->collectionAsArray(
-                method_exists($item, 'pluck') ? $item->pluck('name') : $item->lists('name')
-            );
+            $item = $item->pluck('name')->all();
         }
 
         // multiple items

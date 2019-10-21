@@ -155,13 +155,6 @@ class HasPermission
      */
     protected function forbiddenRoute()
     {
-        /*$action = $request->route()->getAction();
-        if ( isset($action['except']) ) {
-            dd($request->user()->roles->lists('slug'));
-            dd($request->user()->getPermissions());
-            //return $action['except'] == $request->user()->role->slug;
-        }*/
-
         return false;
     }
 

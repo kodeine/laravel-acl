@@ -60,7 +60,7 @@ class UserTest extends ModelsTest
         ]);
         
         $user = new User();
-        $user->username = 'Role test';
+        $user->name = 'Role test';
         $user->email = 'role@test.com';
         $user->password = 'RoleTest';
         $user->save();
@@ -97,7 +97,7 @@ class UserTest extends ModelsTest
         $role->syncPermissions($permission);
         
         $user = new User();
-        $user->username = 'Role test';
+        $user->name = 'Role test';
         $user->email = 'role@test.com';
         $user->password = 'RoleTest';
         $user->save();
@@ -134,7 +134,7 @@ class UserTest extends ModelsTest
         $role->syncPermissions($permission);
         
         $user = new User();
-        $user->username = 'Cache test';
+        $user->name = 'Cache test';
         $user->email = 'cache@test.com';
         $user->password = 'CacheTest';
         $user->save();

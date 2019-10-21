@@ -3,13 +3,15 @@
 namespace Kodeine\Acl\Traits;
 
 use Kodeine\Acl\Traits\HasPermission;
+use Illuminat\Support\Str;
+
 /**
  * Class HasRoleImplementation
  * @package Kodeine\Acl\Traits
  *
  * @method static Builder|Collection|\Eloquent role($role, $column = null)
  */
-trait HasRoleImplementation
+trait HasRole
 {
     use HasPermission;
 
@@ -48,10 +50,10 @@ trait HasRoleImplementation
             }
         );
 
-        $slugs = method_exists($this_roles, 'pluck') ? $this_roles->pluck('slug','id') : $this_roles->lists('slug','id');
+        $slugs = $this_roles->pluck('slug','id');
         return is_null($this_roles)
             ? []
-            : $this->collectionAsArray($slugs);
+            : $slugs->all();
     }
 
     /**
@@ -266,13 +268,13 @@ trait HasRoleImplementation
     public function __call($method, $arguments)
     {
         // Handle isRoleSlug() methods
-        if ( starts_with($method, 'is') and $method !== 'is' and ! starts_with($method, 'isWith') ) {
+        if ( str::startsWith($method, 'is') and $method !== 'is' and ! str::startsWith($method, 'isWith') ) {
             $role = substr($method, 2);
             return $this->hasRole($role);
         }
 
         // Handle canDoSomething() methods
-        if ( starts_with($method, 'can') and $method !== 'can' and ! starts_with($method, 'canWith') ) {
+        if ( str::startsWith($method, 'can') and $method !== 'can' and ! str::startsWith($method, 'canWith') ) {
             $permission = substr($method, 3);
             $permission = snake_case($permission, '.');
 
@@ -280,20 +282,5 @@ trait HasRoleImplementation
         }
 
         return parent::__call($method, $arguments);
-    }
-}
-
-$laravel = app();
-if ($laravel instanceof \Illuminate\Foundation\Application && version_compare($laravel::VERSION, '5.3', '<')) {
-    trait HasRole
-    {
-        use HasRoleImplementation {
-            hasRole as is;
-        }
-    }
-} else {
-    trait HasRole
-    {
-        use HasRoleImplementation;
     }
 }

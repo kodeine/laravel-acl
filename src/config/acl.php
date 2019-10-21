@@ -1,6 +1,19 @@
 <?php
 
 return [
+
+    /*
+    /--------------------------------------------------------------------------
+    / Custom Database Options
+    /--------------------------------------------------------------------------
+    /
+    / If you want to add a prefix to your acl tables, or if you use a different
+    / table for your user class, define it here
+    */
+
+    'db_prefix'   => '',
+    'users_table' => '',
+
     /*
     |--------------------------------------------------------------------------
     | Model Definitions
