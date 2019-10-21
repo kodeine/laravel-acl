@@ -119,6 +119,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function migrate()
     {
+        $this->loadLaravelMigrations();
         $this->loadMigrationsFrom($this->getMigrationsSrcPath());
     }
 
