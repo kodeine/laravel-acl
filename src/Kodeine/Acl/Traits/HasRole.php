@@ -3,7 +3,7 @@
 namespace Kodeine\Acl\Traits;
 
 use Kodeine\Acl\Traits\HasPermission;
-use Illuminat\Support\Str;
+use Illuminate\Support\Str;
 
 /**
  * Class HasRoleImplementation
