@@ -44,7 +44,7 @@ trait HasRole
     {
         $this_roles = \Cache::remember(
             'acl.getRolesById_'.$this->id,
-            config('acl.cacheMinutes'),
+            now()->addMinutes(config('acl.cacheMinutes', 1)),
             function () {
                 return $this->roles;
             }

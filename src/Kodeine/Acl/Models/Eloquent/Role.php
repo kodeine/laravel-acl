@@ -59,7 +59,7 @@ class Role extends Model
     {
         return \Cache::remember(
             'acl.getPermissionsInheritedById_'.$this->id,
-            config('acl.cacheMinutes'),
+            now()->addMinutes(config('acl.cacheMinutes', 1)),
             function () {
                 return $this->getPermissionsInherited();
             }
