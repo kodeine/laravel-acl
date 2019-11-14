@@ -42,7 +42,7 @@ trait HasPermission
         // user permissions overridden from role.
         $permissions = \Cache::remember(
             'acl.getPermissionsById_'.$this->id,
-            config('acl.cacheMinutes'),
+            now()->addMinutes(config('acl.cacheMinutes', 1)),
             function () {
                 return $this->getPermissionsInherited();
             }
@@ -83,7 +83,7 @@ trait HasPermission
         // all of user role permissions
         $merge =  \Cache::remember(
             'acl.getMergeById_'.$this->id,
-            config('acl.cacheMinutes'),
+            now()->addMinutes(config('acl.cacheMinutes', 1)),
             function () {
                 return $this->getPermissions();
             }
