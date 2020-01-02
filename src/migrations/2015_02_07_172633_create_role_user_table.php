@@ -38,7 +38,7 @@ class CreateRoleUserTable extends Migration
 
             $table->foreign('user_id')
                 ->references('id')
-                ->on()
+                ->on($this->prefix . 'users')
                 ->onDelete('cascade');
         });
     }
