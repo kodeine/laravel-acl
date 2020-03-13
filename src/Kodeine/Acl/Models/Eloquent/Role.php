@@ -23,6 +23,11 @@ class Role extends Model
      */
     protected $table;
 
+    protected $dates = [
+        'created_at:Y-m-d H:i:s',
+        'updated_at:Y-m-d H:i:s',
+    ];
+
     public function __construct(array $attributes = [])
     {
         $this->table = config('acl.db_prefix') . 'roles';
