@@ -2,6 +2,7 @@
 
 namespace Kodeine\Acl\Models\Eloquent;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Kodeine\Acl\Traits\HasPermission;
 
@@ -28,6 +29,17 @@ class Role extends Model
         $this->table = config('acl.db_prefix') . 'roles';
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**
