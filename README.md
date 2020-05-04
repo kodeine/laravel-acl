@@ -1,7 +1,7 @@
 
 # Kodeine/Laravel-ACL
 
-[![Laravel](https://img.shields.io/badge/Laravel-~6.0-green.svg?style=flat-square)](http://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-~7.0-green.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-kodeine/laravel--acl-blue.svg?style=flat-square)](https://github.com/kodeine/laravel-acl/)
 [![Build Status](https://img.shields.io/travis/kodeine/laravel-acl/master?style=flat-square)](https://travis-ci.org/kodeine/laravel-acl)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://tldrlegal.com/license/mit-license)
