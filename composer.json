@@ -1,5 +1,5 @@
 {
-    "name": "kodeine/laravel-acl",
+    "name": "pennyappeal-charity/laravel-acl",
     "description": "Light-weight role-based permissions for Laravel 5 built in Auth system.",
     "license": "MIT",
     "keywords": [
