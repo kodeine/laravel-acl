@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Kodeine\Acl\Helper\Config;
 
 class CreateRoleUserTable extends Migration
 {
@@ -13,7 +14,6 @@ class CreateRoleUserTable extends Migration
     public function __construct()
     {
         $this->prefix = config('acl.db_prefix');
-        $this->users_table = config('acl.users_table') === '' ? 'users' : config('acl.users_table');
     }
 
     /**
@@ -27,7 +27,13 @@ class CreateRoleUserTable extends Migration
             $table->increments('id');
 
             $table->integer('role_id')->unsigned()->index()->foreign()->references("id")->on("roles")->onDelete("cascade");
-            $table->bigInteger('user_id')->unsigned()->index()->foreign()->references("id")->on("users")->onDelete("cascade");
+            $table->bigInteger('user_id')
+                ->unsigned()
+                ->index()
+                ->foreign()
+                ->references("id")
+                ->on(Config::usersTableName())
+                ->onDelete("cascade");
 
             $table->timestamps();
 
@@ -38,7 +44,7 @@ class CreateRoleUserTable extends Migration
 
             $table->foreign('user_id')
                 ->references('id')
-                ->on($this->prefix . 'users')
+                ->on($this->prefix . Config::usersTableName())
                 ->onDelete('cascade');
         });
     }
