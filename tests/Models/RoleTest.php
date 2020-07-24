@@ -109,6 +109,9 @@ class RoleTest extends ModelsTest
         $this->assertDatabaseHas('roles', $role->toArray());
     }
     
+
+ 
+
     /** @test */
     public function itCanDelete()
     {
