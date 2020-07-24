@@ -69,7 +69,7 @@ class RoleTest extends ModelsTest
         $this->assertInstanceOf(Permission::class, $permission);
     }
     
-    /** @test */
+    /** @test  */
     public function itCanCreate()
     {
         $attributes = [
