@@ -24,8 +24,8 @@ class BigintUserKeys extends Migration
      */
     public function down()
     {
-        Schema::table('role_user', function (Blueprint $table) {
-            $table->integer("user_id")->unsigned()->change();
-        });
+        // Schema::table('role_user', function (Blueprint $table) {
+        //     $table->integer("user_id")->unsigned()->change();
+        // });
     }
 }
