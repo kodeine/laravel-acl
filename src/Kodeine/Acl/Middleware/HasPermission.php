@@ -3,6 +3,7 @@
 namespace Kodeine\Acl\Middleware;
 
 use Closure;
+use Kodeine\Acl\Helper\FieldException;
 
 class HasPermission
 {
@@ -40,28 +41,53 @@ class HasPermission
     {
         $this->request = $request;
 
-        // override crud resources via config
-        $this->crudConfigOverride();
+        $this->crudConfigOverrideViaConfig();
+    
 
+        try {
+            $this->authoriztionChacker($request , $next);
+          
+        } catch (\Throwable $th) {
+            return $this->makeResponseWithException($th->message,$th->status,$th->codeStatus);
+        }
+ 
+
+        return $this->IfRouteHasAccess($request,$next);
+
+        return abort(401, 'You are not authorized to access this resource.');
+
+    }
+
+    public function makeResponseWithException(string $description ,string $status, int $statusCode)
+    {
+        return response()->json([
+            'error' => [
+                'status_code' => $statusCode,
+                'code'        => $status,
+                'description' => $description
+            ],
+        ], $statusCode);
+    }
+
+    public function authoriztionChacker($request)
+    {
+        
+        if ($request->isJson() || $request->wantsJson()) {
+            throw new FieldException("You are not authorized to access this resource.",'INSUFFICIENT_PERMISSIONS', 401 );
+            
+        }
+    }
+
+
+    public function IfRouteHasAccess($request,Closure $next)
+    {
         // if route has access
-        if (( ! $this->getAction('is') or $this->hasRole()) and
-            ( ! $this->getAction('can') or $this->hasPermission()) and
-            ( ! $this->getAction('protect_alias') or $this->protectMethods())
+        if ((!$this->getAction('is') or $this->hasRole()) and
+            (!$this->getAction('can') or $this->hasPermission()) and
+            (!$this->getAction('protect_alias') or $this->protectMethods())
         ) {
             return $next($request);
         }
-
-        if ( $request->isJson() || $request->wantsJson() ) {
-            return response()->json([
-                'error' => [
-                    'status_code' => 401,
-                    'code'        => 'INSUFFICIENT_PERMISSIONS',
-                    'description' => 'You are not authorized to access this resource.'
-                ],
-            ], 401);
-        }
-
-        return abort(401, 'You are not authorized to access this resource.');
     }
 
     /**
@@ -74,7 +100,7 @@ class HasPermission
         $request = $this->request;
         $role = $this->getAction('is');
 
-        return ! $this->forbiddenRoute() && $request->user()->hasRole($role);
+        return !$this->forbiddenRoute() && $request->user()->hasRole($role);
     }
 
     /**
@@ -87,7 +113,7 @@ class HasPermission
         $request = $this->request;
         $do = $this->getAction('can');
 
-        return ! $this->forbiddenRoute() && $request->user()->hasPermission($do);
+        return !$this->forbiddenRoute() && $request->user()->hasPermission($do);
     }
 
     /**
@@ -115,8 +141,7 @@ class HasPermission
         // and does not have methods like
         // UserController@index but only
         // UserController we use crud restful.
-        $methods = is_array($methods) ? $methods :
-            (in_array($caller, $resources) ?
+        $methods = is_array($methods) ? $methods : (in_array($caller, $resources) ?
                 $this->crud['resource'] : $this->crud['restful']);
 
         // determine crud method we're trying to protect
@@ -133,10 +158,11 @@ class HasPermission
             return $e . '.' . $this->parseAlias();
         }, array_keys($crud)));
 
-        return ! $this->forbiddenRoute() && $request->user()->hasPermission($permission);
+        return !$this->forbiddenRoute() && $request->user()->hasPermission($permission);
     }
-    
-    private function filterMethods($methods, $callback) {
+
+    private function filterMethods($methods, $callback)
+    {
         $filtered = [];
 
         foreach ($methods as $key => $value) {
@@ -181,7 +207,7 @@ class HasPermission
      */
     protected function parseAlias()
     {
-        if ( $alias = $this->getAction('protect_alias') ) {
+        if ($alias = $this->getAction('protect_alias')) {
             return $alias;
         }
 
@@ -205,9 +231,9 @@ class HasPermission
         $action = $this->request->route()->getActionName();
 
         // parse index, store, create etc
-        if ( preg_match('/@([^\s].+)$/is', $action, $m) ) {
+        if (preg_match('/@([^\s].+)$/is', $action, $m)) {
             $controller = $m[1];
-            if ( $controller != 'Closure' ) {
+            if ($controller != 'Closure') {
                 return $controller;
             }
         }
@@ -218,15 +244,15 @@ class HasPermission
     /**
      * Override crud property via config.
      */
-    protected function crudConfigOverride()
+    protected function crudConfigOverrideViaConfig()
     {
         // Override crud restful from config.
-        if ( ($restful = config('acl.crud.restful')) != null ) {
+        if (($restful = config('acl.crud.restful')) != null) {
             $this->crud['restful'] = $restful;
         }
 
         // Override crud resource from config.
-        if ( ($resource = config('acl.crud.resource')) != null ) {
+        if (($resource = config('acl.crud.resource')) != null) {
             $this->crud['resource'] = $resource;
         }
     }

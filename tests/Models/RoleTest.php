@@ -69,7 +69,7 @@ class RoleTest extends ModelsTest
         $this->assertInstanceOf(Permission::class, $permission);
     }
     
-    /** @test */
+    /** @test  */
     public function itCanCreate()
     {
         $attributes = [
@@ -109,6 +109,9 @@ class RoleTest extends ModelsTest
         $this->assertDatabaseHas('roles', $role->toArray());
     }
     
+
+ 
+
     /** @test */
     public function itCanDelete()
     {
