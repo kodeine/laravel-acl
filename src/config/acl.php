@@ -44,4 +44,6 @@ return [
      */
 		
     'cacheMinutes' => 1,
+	
+    'db_prefix' => 'default_'
 ];
