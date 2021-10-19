@@ -26,11 +26,11 @@ class CreatePermissionUserTable extends Migration
 		Schema::create($this->prefix . 'permission_user', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('permission_id')->unsigned()->index()->references('id')->on('permissions')->onDelete('cascade');
-			$table->bigInteger('user_id')
+			$table->bigInteger($this->prefix . 'user_id')
                 ->unsigned()
                 ->index()
                 ->references('id')
-                ->on(Config::usersTableName())
+                ->on($this->prefix . Config::usersTableName())
                 ->onDelete('cascade');
 			$table->timestamps();
 		});
