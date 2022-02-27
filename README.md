@@ -8,7 +8,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/kodeine/laravel-acl.svg?style=flat-square)](https://packagist.org/packages/kodeine/laravel-acl)
 
 
-Laravel ACL adds role based permissions to built in Auth System of Laravel 8.0+. ACL middleware protects routes and even crud controller methods.
+Laravel ACL adds role based permissions to built in Auth System of Laravel 9.0+. ACL middleware protects routes and even crud controller methods.
 
 # Table of Contents
 * [Requirements](#requirements)
