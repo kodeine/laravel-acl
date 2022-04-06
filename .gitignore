@@ -6,3 +6,4 @@ Thumbs.db
 Acl_*
 vendor
 .devcontainer
+.phpunit.result.cache
