@@ -51,21 +51,13 @@ class AclServiceProvider extends ServiceProvider
     public function registerBladeDirectives()
     {
         // role
-        Blade::directive('role', function ($expression) {
-            return "<?php if (Auth::check() && Auth::user()->hasRole({$expression})): ?>";
-        });
-
-        Blade::directive('endrole', function () {
-            return "<?php endif; ?>";
+        Blade::if('role', function ($expression) {
+            return Auth::guard(config('acl.guard'))->check() && Auth::guard(config('acl.guard'))->user()->hasRole($expression);
         });
 
         // permission
-        Blade::directive('permission', function ($expression) {
-            return "<?php if (Auth::check() && Auth::user()->hasPermission({$expression})): ?>";
-        });
-
-        Blade::directive('endpermission', function () {
-            return "<?php endif; ?>";
+        Blade::if('permission', function ($expression) {
+            return Auth::guard(config('acl.guard'))->check() && Auth::guard(config('acl.guard'))->user()->hasPermission($expression);
         });
     }
 }

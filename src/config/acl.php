@@ -44,4 +44,11 @@ return [
      */
 		
     'cacheMinutes' => 1,
+
+    /**
+     * Guard
+     * Set the guard for user validations.
+     */
+
+    'guard' => config('auth.defaults.guard'),
 ];
