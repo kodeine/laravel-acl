@@ -55,8 +55,9 @@ composer require kodeine/laravel-acl "^1.0"
 $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
 ```
 
-> **Use your own models.**
-> Once you publish, it publishes the configuration file where you can define your own models which should extend to Acl models.
+> **Once you publish, it publishes the configuration file where you can:**
+> - **Use your own models**: Define your own models which should extend to Acl models.
+> - **Use your own guard**: Define a guard other than laravel default for user recovery.
 
 4. Add the middleware to your `app/Http/Kernel.php`.
 
@@ -99,6 +100,9 @@ Here's the TODO list for the next release.
 * [ ] Adding cache to final user permissions.
 
 # <a name="change-logs"></a>Change Logs
+
+**June 14 2022**
+* [x] Added support for different guard
 
 **September 14 2019**
 * [x] Updated the readme to reflect new major release

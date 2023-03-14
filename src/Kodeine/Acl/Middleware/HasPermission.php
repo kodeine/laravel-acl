@@ -39,6 +39,7 @@ class HasPermission
     public function handle($request, Closure $next)
     {
         $this->request = $request;
+        $this->guard = config('acl.guard');
 
         // override crud resources via config
         $this->crudConfigOverride();
@@ -73,8 +74,9 @@ class HasPermission
     {
         $request = $this->request;
         $role = $this->getAction('is');
+        $guard = $this->guard;
 
-        return ! $this->forbiddenRoute() && $request->user()->hasRole($role);
+        return ! $this->forbiddenRoute() && $request->user($guard)->hasRole($role);
     }
 
     /**
@@ -86,8 +88,9 @@ class HasPermission
     {
         $request = $this->request;
         $do = $this->getAction('can');
+        $guard = $this->guard;
 
-        return ! $this->forbiddenRoute() && $request->user()->hasPermission($do);
+        return ! $this->forbiddenRoute() && $request->user($guard)->hasPermission($do);
     }
 
     /**
@@ -104,6 +107,9 @@ class HasPermission
 
         // protection methods being passed in a route.
         $methods = $this->getAction('protect_methods');
+
+        // guard from config 
+        $guard = $this->guard;
 
         // get method being called on controller.
         $caller = $this->parseMethod();
@@ -133,7 +139,7 @@ class HasPermission
             return $e . '.' . $this->parseAlias();
         }, array_keys($crud)));
 
-        return ! $this->forbiddenRoute() && $request->user()->hasPermission($permission);
+        return ! $this->forbiddenRoute() && $request->user($guard)->hasPermission($permission);
     }
     
     private function filterMethods($methods, $callback) {
