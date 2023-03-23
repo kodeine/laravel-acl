@@ -49,7 +49,7 @@ composer require kodeine/laravel-acl "^1.0"
 ],
 ```
 
-3. Publish the package configuartion files and add your own models to the list of ACL models"
+3. Publish the package configuartion files, migrations and add your own models to the list of ACL models"
 
 ```
 $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
