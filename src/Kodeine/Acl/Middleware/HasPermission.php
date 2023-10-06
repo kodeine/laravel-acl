@@ -29,6 +29,9 @@ class HasPermission
         ],
     ];
 
+    /** @var \Illuminate\Http\Request $request */
+    protected $request;
+
     /**
      * Handle an incoming request.
      *
