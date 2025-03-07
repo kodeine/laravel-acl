@@ -29,6 +29,8 @@ class HasPermission
         ],
     ];
 
+    protected $guard = null;
+    
     /** @var \Illuminate\Http\Request $request */
     protected $request;
 
