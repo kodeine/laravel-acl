@@ -27,12 +27,12 @@ class CreateRoleUserTable extends Migration
             $table->increments('id');
 
             $table->integer('role_id')->unsigned()->index()->foreign()->references("id")->on("roles")->onDelete("cascade");
-            $table->bigInteger('user_id')
+            $table->bigInteger($this->prefix . 'user_id')
                 ->unsigned()
                 ->index()
                 ->foreign()
                 ->references("id")
-                ->on(Config::usersTableName())
+                ->on($this->prefix . Config::usersTableName())
                 ->onDelete("cascade");
 
             $table->timestamps();
@@ -42,7 +42,7 @@ class CreateRoleUserTable extends Migration
                 ->on($this->prefix . 'roles')
                 ->onDelete('cascade');
 
-            $table->foreign('user_id')
+            $table->foreign($this->prefix . 'user_id')
                 ->references('id')
                 ->on($this->prefix . Config::usersTableName())
                 ->onDelete('cascade');
